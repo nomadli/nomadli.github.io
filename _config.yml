@@ -1,0 +1,12 @@
+# Site settings
+title: nomadli
+email: dzym79@qq.com
+description: nomadli's blog
+baseurl: ""
+url: "http://nomadli.github.io/"
+github_username:  nomadli
+permalink: /:year/:month/:day/:title/
+
+# Build settings
+markdown: kramdown
+
