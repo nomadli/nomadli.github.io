@@ -4,17 +4,14 @@ layout: default
 <div id="index" class="row">
   <div class="col-sm-9">
     <div class="post-area">
-      <!-- small button -->
-      <p class="pull-right visible-xs">
-        <button>toggle</button>
-      </p>
+
       <div class="post-list-header">
         Posts
       </div>
       <div class="post-list-body">
         
         <div class="all-posts" post-cate="All">
-          {% for post in site.posts %}
+          {% for post in paginator.posts %}
             <a class="post-list-item" href="{{ post.url | prepend: site.baseurl }}">
               <h2>
               {{ post.title }}
@@ -22,6 +19,27 @@ layout: default
               <span class="">{{ post.date | date: "%b %-d, %Y" }}</span>
             </a>
           {% endfor %}
+      <div class="paginator">
+              {% if paginator.total_pages > 1 %}
+              {% if paginator.previous_page %}
+            <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">上一页</a>
+        {% endif %}
+
+        {% for page in (1..paginator.total_pages) %}
+            {% if page == paginator.page %}
+              <span class="active">{{ page }}</span>
+            {% elsif page == 1 %}
+              <a href="{{ '/index.html' | prepend: site.baseurl | replace: '//', '/' }}">{{ page }}</a>
+            {% else %}
+              <a href="/{{ site.paginate_path | prepend: site.url | replace: '//', '/' | replace: ':num', page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if paginator.next_page %}
+            <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">下一页</a>
+        {% endif %}
+              {% endif %}
+      </div>
         </div>
         <!-- <div class="posts-in-categories"> -->
         {% for category in site.categories %}
@@ -29,7 +47,7 @@ layout: default
             {% for posts in category  %}
               {% for post in posts %}
                 {% if post.url %}
-                  <a href="{{ post.url }}" class="post-list-item">
+                  <a href="{{ post.url | prepend: site.baseurl }}" class="post-list-item">
                     <h2>
                     {{ post.title }}
                     </h2>
@@ -51,10 +69,10 @@ layout: default
         Categories
       </div>
       
-      <a href="javascript:;" class="categories-list-item" cate="All">
-        All<span class="my-badge"> {{site.categories | size}}</span>
+      <a href="{{'/index.html' | prepend: site.baseurl}}" class="categories-list-item" cate="All">
+        All<span class="my-badge"> {{site.posts | size}}</span>
       </a>
-      {% for category in site.categories %}
+      {% for category in site.categories order:ascending %}
         <a href="javascript:;" class="categories-list-item" cate="{{ category | first }}">
           {{ category | first }} <span class="my-badge">{{ category | last | size }}</span>
         </a>
