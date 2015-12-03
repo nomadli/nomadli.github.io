@@ -21,19 +21,12 @@
               {% if p.url != page.url %}
                 {% if p.title != 'Search' %}
                   <li><a href="{{ p.url | prepend: site.baseurl }}"><span class="glyphicon {{ p.icon }}"></span> {{ p.title }}</a></li>
+                {% else %}
+                	<form action="{{ '/search' | prepend: site.baseurl }}" method="GET">
+                		<input type="text" name="query" style="width:320px;" placeholder="Enter key word">
+              		</form>
                 {% endif %}
               {% endif %}
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav navbar-right">
-          {% for p in site.pages %}
-            {% if p.title == 'Search' %}
-              <form action="{{ '/search' | prepend: site.baseurl }}" method="GET">
-                <input type="text" name="query" style="width:320px;" placeholder="Enter key word">
-              </form>
             {% endif %}
           {% endfor %}
         </ul>
