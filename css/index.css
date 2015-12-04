@@ -259,6 +259,11 @@ footer .point{
 .post img[alt=github]{
   width: 32px;
   height: 32px;
+
+  -webkit-box-shadow: 0 0 5px 2px rgba(0,0,0,0.0);
+	-moz-box-shadow: 0 0 5px 2px rgba(0,0,0,0.0);
+	-o-box-shadow: 0 0 5px 2px rgba(0,0,0,0.0);
+	box-shadow: 0 0 5px 2px rgba(0,0,0,0.0);
 }
 /**
  * Blockquotes
