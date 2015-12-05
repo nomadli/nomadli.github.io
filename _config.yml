@@ -9,6 +9,7 @@ permalink: /:year/:month/:day/:title/
 
 # Build settings
 markdown: kramdown
+input: GFM
 
 gems: [jekyll-paginate]
 paginate: 10
