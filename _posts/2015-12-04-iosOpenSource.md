@@ -10,6 +10,7 @@ excerpt: IOS相关开源。
 {:toc}
 
 ## React JavaScript MVC 框架
-- Facebook开发的前后端通吃的Web App解决方案,衍生的React Native项目,目标希望用写Web App的方式去写Native App。  [![github][1]](https://github.com/facebook/react)
+- Facebook开发的前后端通吃的Web App JavaScript解决方案.  [![github][1]](https://github.com/facebook/react)  
+- React Native 用写Web App的方式去写Native App.  [![github][1]](https://github.com/facebook/react-native)  
 
 [1]: /img/github.png
