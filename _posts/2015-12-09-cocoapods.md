@@ -16,6 +16,8 @@ excerpt: CocoaPods使用。
 - touch Podfile、edit Podfile  
 - pod install  
 - pod update
+-  pod install --verbose --no-repo-update
+-  pod update --verbose --no-repo-update
 
 ## 指定平台和SDK版本
 - platform :ios, 'x.x.x' ios平台Deployment Target是x.x.x
