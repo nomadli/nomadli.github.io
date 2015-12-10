@@ -38,12 +38,3 @@ excerpt: CocoaPods使用。
 ## 库列表
 - pod search name 查找项目是否在库中
 - pod setup 更新项目列表
-
-
-
-
-
-
-
-
-
