@@ -35,6 +35,9 @@ excerpt: CocoaPods使用。
 - link_with 'target1','target2'.... target1、target2、使用相同的依赖库  
 - target:'target1' do .... end 不同的target使用不同的依赖库  
 
+## 编译为动态库
+- use_frameworks! platform 必须在8.0以上
+
 ## 库列表
 - pod search name 查找项目是否在库中
 - pod setup 更新项目列表
