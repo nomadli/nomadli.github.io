@@ -40,5 +40,11 @@ excerpt: IOS 越狱插件开发 Theos Tweak。
 8. 在Tweak.xm文件中进行hook
 9. %hook 后跟要hook的类 %end表示结束
 10. %orig 表示调用原函数 %orig(arg1,arg2,....)
-11. 在markfile中 工程名_FRAMEWORKS = UIKit 包含要用的库
-12. make、package、install
+11. %log()输出日志到syslog
+12. %group 将hook分组 与%end成对 默认%group_ungrouped组
+13. %init()初始化指定组，不指定初始化默认组
+14. %ctor{} 初始化组或MSHookFunction
+15. %new 添加新函数
+16. %c 等同于objc_getClass()
+17. 在markfile中 工程名_FRAMEWORKS = UIKit 包含要用的库
+18. make、package、install
