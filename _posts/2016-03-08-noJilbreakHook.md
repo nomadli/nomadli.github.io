@@ -24,6 +24,19 @@ excerpt: IOS 非越狱插件开发。
 7. 只会把当前架构的代码脱壳 lipo app -thin armv7 -output app_armv7 抽取当前架构代码，不再是富文件
 8. 或者直接在pp助手等越狱应用中下载，就不用自己解密了
 
+## Clutch
+解密ipa [github](https://github.com/KJCracks/Clutch)
+
+## PoedCrackMod
+解密ipa
+1. 将富二进制swap header(arm7设备上运行arm6)生成armv6，armv7两个App
+2. 获得cryptid，cryptsize，cryptsize
+3. 将armv6部分的cryptid修改为0，gdb导出对应的armv6解密部分替换掉armv6加密部分，签名
+4. 将armv7部分的cryptid修改为0，gdb导出对应的armv7解密部分，替换掉armv7加密部分，签名
+5. 合并解密过的armv6，armv7
+6. 打包成ipa安装包
+7. 6之前可以 伪造可执行文件的时间戳、伪造SignerIdentity、伪造iTunesMetadata.plist
+
 ## MachOView
 查看Mach-O文件结构工具，Load Commands段标记加载哪些动态库。
 
@@ -59,7 +72,4 @@ https://github.com/KJCracks/yololib
 3. codesign -f -s "iPhone Developer: dzym79@qq.com(xxxxxxxx)" xxx.app/self.dylib
 4. codesign -f -s "iPhone Developer: dzym79@qq.com(xxxxxxxx)" --entitlements Entitlements.plist xxx.app
 5. xcrun -sdk iphoneos PackageApplication -v xxx.app -o xxx.ipa
-
-## 我破解魔力小孩数学实验
-1. xcode7
 
