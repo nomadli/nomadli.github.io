@@ -12,7 +12,7 @@ excerpt: IOS 非越狱插件开发。
 ## file otool
 1. 解压ipa
 2. file 可执行文件 查看包含多少cpu代码
-3. otool -l 可执行文件 | grep crypt 查看是否加密
+3. otool -l 可执行文件 \| grep crypt 查看是否加密
 
 ## dumpdecrypted
 1. 解密ipa，在运行时dump代码 [github](https://github.com/stefanesser/dumpdecrypted)
