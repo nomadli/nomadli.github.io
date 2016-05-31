@@ -58,7 +58,7 @@ https://github.com/KJCracks/yololib
 ## Hook
 1. class-dump 了解app 找到需要hook的函数
 2. ida 反汇编查看某函数具体逻辑
-3. app不会调用自定义动态库中的函数，只会触发动态库初始化，因此添加初始化函数 __attribute__((constructor)) static void entry（）{}
+3. app不会调用自定义动态库中的函数，只会触发动态库初始化，因此添加初始化函数 \_\_attribute\_\_((constructor)) static void entry（）{}
 4. https://github.com/rpetrich/CaptainHook 实现了动态库中hook的宏，
 5. CHDeclareClass宏 声明想hook的类
 6. 在entry中用CHLoadClass 或 CHLoadLateClass加载3中申明的class
