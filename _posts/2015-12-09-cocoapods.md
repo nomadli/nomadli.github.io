@@ -16,8 +16,11 @@ excerpt: CocoaPods使用。
 - touch Podfile、edit Podfile  
 - pod install  
 - pod update
--  pod install --verbose --no-repo-update
--  pod update --verbose --no-repo-update
+- pod install --verbose --no-repo-update
+- pod update --verbose --no-repo-update
+- pod search name 查找项目是否在库中
+- pod setup 更新项目列表
+- pod repo remove master 清理
 
 ## 指定平台和SDK版本
 - platform :ios, 'x.x.x' ios平台Deployment Target是x.x.x
@@ -38,6 +41,5 @@ excerpt: CocoaPods使用。
 ## 编译为动态库
 - use_frameworks! platform 必须在8.0以上
 
-## 库列表
-- pod search name 查找项目是否在库中
-- pod setup 更新项目列表
+## 指定地址源
+- source http://github.com/...../Specs.git
