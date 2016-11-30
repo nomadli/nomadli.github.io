@@ -20,6 +20,7 @@ excerpt: CocoaPods使用。
 - pod update --verbose --no-repo-update
 - pod search name 查找项目是否在库中
 - pod setup 更新项目列表
+- pod cache clean 'xxxx' 或 --all
 - pod repo remove master 清理
 - pod spec create '仓库名' 创建podspec配置
 - pod lib create '仓库名' 创建仓库模板
@@ -62,8 +63,25 @@ excerpt: CocoaPods使用。
 ## 指定地址源
 - source http://github.com/...../Specs.git
 
-## svn 命令
-- svnadmin create name
-- svn co file:///path
-- svn rm -m "remove tree or file" http://*
-- svn import -m "add tree or file" name http://* 
+## spec
+01. Pod::Spec.new do |s| .......  end
+02. s.name s.version s.summary  s.license s.homepage
+03. s.author = { "register name" => "register email" }
+04. s.description = <<-DESC ....... DESC
+05. s.source = { :git => "https://xx/xx.git", :tag => s.version.to_s }
+06. s.platform     = :ios
+07. s.ios.deployment_target = "7.0"
+08. s.frameworks = 'Foundation'
+09. s.libraries
+10. s.vendored_frameworks = '*.framework' 本身是framework
+11. s.vendored_libraries
+12. s.requires_arc = true s.exclude_files 排除
+13. s.dependency 'AFNetworking', '~> 2.6.1'
+14. s.screenshots '库截图展示'
+15. s.social_media_url '支持网站'
+16. s.subspec 'no-arc' do |sna| ....... end
+
+## sample
+- pod 'xxx', :svn => 'svn://xx/branches/'+1
+- pod 'xxx', :svn => 'svn://xx/branches/1'
+- pod 'xxx', :svn => 'svn://xx', :tag => '1'
