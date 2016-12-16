@@ -18,4 +18,20 @@ excerpt: 服务器相关技术。
 ## linux系统监控
 - netdata  [![github][1]](https://github.com/firehol/netdata)
 
+## 云相关
+001. KVM
+002. XEN
+003. hypervisor
+101. CloudStack
+102. OpenStack
+103. AWS
+104. VMware vCloud OpenStack vSphere vCenter
+201. Docker
+202. Kubernets
+203. CoreOS
+204. Mesos
+
+## 开源监控网站
+1. http://openradar.appspot.com
+
 [1]: /img/github.png
