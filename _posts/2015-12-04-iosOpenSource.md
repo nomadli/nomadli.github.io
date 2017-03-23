@@ -19,4 +19,8 @@ excerpt: IOS相关开源。
 ## 数据库
 - sqlite面向对象操作 [![github][1]](https://github.com/Zepo/GYDataCenter) 
 
+
+## crash
+- plcrashreporter  [![github][1]](https://github.com/plausiblelabs/plcrashreporter)
+
 [1]: /img/github.png
