@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Docker on Mac"
+title:  "postgresql"
 date:   2017-05-09 11:17:00
 categories: Other
 excerpt: postgresql
@@ -16,6 +16,8 @@ excerpt: postgresql
 - \q 断开数据库链接
 - alter user postgres with password 'new password'; 修改密码
 - create extension pg_stat_statements; 创建统计扩展模块
+- DROP DATABASE dbname; 删除数据库
+- CREATE DATABASE dbname TEMPLATE template0;
 # postgresql.conf参数
 - 参数的名称都是不区分大小写的。取值boolean、integer、floating point和string表示。
 - 内存单位KB、MB、GB，默认单位是数据块的个数，每个数据块的大小是8KB。
