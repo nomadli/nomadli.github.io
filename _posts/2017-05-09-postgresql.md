@@ -18,6 +18,27 @@ excerpt: postgresql
 - create extension pg_stat_statements; 创建统计扩展模块
 - DROP DATABASE dbname; 删除数据库
 - CREATE DATABASE dbname TEMPLATE template0;
+
+# 权限
+- 新建数据库 默认允许任何用户连接、不允许除超级用户和owner外任何人创建schema、自动创建public角色(schema)、允许任何人在public下创建、查询对象
+- 新建schema 默认除超级用户和owner其他用户无法查看和修改对象
+
+# C API
+01. PQconnectdb host、hostaddr、port、dbname、connect_timeout、user、password
+02. PQfinish 释放链接
+03. PQreset 重置链接
+04. PQdb 返回连接的数据库名称
+05. PQuser 返回连接的用户名称
+06. PQpass 返回连接的用户名密码
+07. PQhost 返回连接的服务器主机名
+08. PQport 返回连接的端口
+09. PQstatus 返回连接的状态
+10. PQparameterStatus 查看当前连接的某个参数设置
+11. PQerrorMessage 返回最近连接操作产生的错误信息
+12. PQexec 执行sql
+13. PQexecParams 执行单句sql
+14. PQprepare、PQexecPrepared、DEALLOCATE 预编译sql语句
+
 # postgresql.conf参数
 - 参数的名称都是不区分大小写的。取值boolean、integer、floating point和string表示。
 - 内存单位KB、MB、GB，默认单位是数据块的个数，每个数据块的大小是8KB。
