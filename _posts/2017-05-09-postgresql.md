@@ -12,12 +12,33 @@ excerpt: postgresql
 # 基本命令
 - pg_ctl start -D /xxx/xxx 启动数据库
 - pg_ctl stop -D /xxx/xxx -m fast 停止数据库
-- pqsl 链接数据库
-- \q 断开数据库链接
-- alter user postgres with password 'new password'; 修改密码
+- psql -h 127.0.0.1 -p 1980 -U postgres 链接数据库
+- createuser -E -P -I -h ip -p port -U user newuser 新用户
 - create extension pg_stat_statements; 创建统计扩展模块
-- DROP DATABASE dbname; 删除数据库
-- CREATE DATABASE dbname TEMPLATE template0;
+- \q 断开数据库链接
+- \l 列出数据库
+- \c dbname 切换数据库
+- \dn 查看模式
+- \du 查看用户
+- \dt 列出表
+- \d tablename 查看表结构
+- \z tablename 查看表权限
+- select * from current_user; 当前用户
+- drop database dbname 删除数据库
+- drop role rolename 删除模式或用户
+- revoke all on database dbname from public;
+- revoke all on schema sch_name from public;   
+- revoke all on language plpgsql from public; 
+- revoke all on table ... from public;  
+- revoke all on function ... from public;
+- INFORMATION_SCHEMA.role_table_grants 权限表
+- select current_database(); 当前数据库
+- show server_encoding; 当前数据库编码
+- CREATE DATABASE dbname OWNER usename TEMPLATE template1 ENCODING 'utf8' LC_COLLATE collate LC_CTYPE ctype TABLESPACE tablespacename CONNECTION LIMIT 10
+- grant connect on database dbname to "dbuse";允许链接  
+- grant usage on schema sch_name to "dbuse";赋予模式使用权限
+- grant select,insert,... on table users to "dbuse";
+- select setval(pg_get_serial_sequence('table', 'colname'), number); 设置自增变量当前值
 
 # 权限
 - 新建数据库 默认允许任何用户连接、不允许除超级用户和owner外任何人创建schema、自动创建public角色(schema)、允许任何人在public下创建、查询对象
