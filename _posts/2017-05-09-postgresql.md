@@ -18,14 +18,31 @@ excerpt: postgresql
 - \q 断开数据库链接
 - \l 列出数据库
 - \c dbname 切换数据库
-- \dn 查看模式
+- \dnS 查看模式
 - \du 查看用户
 - \dt 列出表
 - \d tablename 查看表结构
 - \z tablename 查看表权限
+- create schema app; 创建schema
+- show search_path 当前默认schema
+- set search_path to schemaname; 或 alter database dbname set search_path to schemaname;
+- alter default privileges in schema schemaname grant select，... on tables to dbuser；
+- select * from pg_namespace; schema权限
 - select * from current_user; 当前用户
 - drop database dbname 删除数据库
 - drop role rolename 删除模式或用户
+- 权限 r -- SELECT ("read")
+      w -- UPDATE ("write")
+      a -- INSERT ("append")
+      d -- DELETE
+      D -- TRUNCATE
+      x -- REFERENCES
+      t -- TRIGGER
+      X -- EXECUTE
+      U -- USAGE
+      C -- CREATE
+      c -- CONNECT
+      T -- TEMPORARY
 - revoke all on database dbname from public;
 - revoke all on schema sch_name from public;   
 - revoke all on language plpgsql from public; 
