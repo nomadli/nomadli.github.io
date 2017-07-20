@@ -247,10 +247,11 @@ excerpt: postgresql
 	27. wal_level = minimal, replica, or logical
 
 # pg_hba.conf 客户端认证配置
-01. 第一列 local 本地连接认证、host 远程连接 tcp/ip连接
+01. 第一列 local 本地连接认证、host 远程连接 tcp/ip连接 hostssl
 02. 第二列 数据库 all 所有数据库，当其它规则没有匹配则匹配all
 03. 第三列 数据库用户 all 同02
-04. 第四列 认证方式
+04. 第四列 地址  0.0.0.0/0 ::/0 表示所有地址
+05. 第五列 认证方式
     01. ident local使用同名用户登录无需验证，如果没有同名用户则失败
     02. md5 md5密码
     03. password 明文密码
