@@ -76,3 +76,4 @@ excerpt: iptables
 - iptables -D INPUT 1 删除IPUT链的filter表的第一条规则
 - iptables -I INPUT -p icmp -j REJECT 拒绝进入防火墙的所有ICMP协议包
 - iptables -A FORWARD -p ! icmp -j ACCEPT 允许转发除ICMP协议外所有数据包
+- iptables -nL --line-number -t nat 显示nat表所有管道的规则及行号
