@@ -9,6 +9,36 @@ excerpt: 服务器相关技术。
 * content
 {:toc}
 
+## 动态库搜索路径
+1. 编译时指定的动态库搜索路径
+2. LD_LIBRARY_PATH 指定的动态库路径
+3. /etc/ld.so.conf 指定的动态库路径
+4. 默认路径/lib
+5. 默认路径/usr/lib
+
+#lib
+001. boost
+002. log4cxx
+003. libapr
+004. libaprutil
+005. libcrypto
+006. libcurl
+007. libexpat
+008. libgloox
+009. libiconv
+010. libsmtp
+011. libsnmp
+012. libssl
+013. libsybdb
+014. libmysqlclient
+015. libcoredumper
+016. libopenssl
+017. libevent
+018. redis
+019. zookeeper
+020. rdkafka
+021. zlib
+
 ## 分布式开源框架
 - Hadoop Apache开发的分布式系统基础架构，实现了一个分布式文件系统HDFS(Hadoop Distributed File System)和MapReduce海量数据计算,适合做搜索引擎。   [![github][1]](https://github.com/apache/hadoop)
 - HBase Apache为Hadoop开发的一个分布式的、面向列的非结构化数据存储的数据库，源于Google论文Bigtable。最大特点是基于列而不是基于行的模式。   [![github][1]](https://github.com/apache/hbase)
