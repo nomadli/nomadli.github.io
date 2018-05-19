@@ -9,6 +9,15 @@ excerpt: postgresql
 * content
 {:toc} 
 
+# 限制
+- 最大单个数据库大小     不限	
+- 最大数据单表大小      32 TB
+- 单条记录最大         1.6 TB
+- 单字段最大允许       1 GB
+- 单表允许最大记录数    不限
+- 单表最大字段数       250 - 1600 (取决于字段类型)
+- 单表最大索引数       不限
+
 # 基本命令
 - pg_ctl start -D /xxx/xxx 启动数据库
 - pg_ctl stop -D /xxx/xxx -m fast 停止数据库
