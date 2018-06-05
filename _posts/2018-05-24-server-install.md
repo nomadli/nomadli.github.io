@@ -17,6 +17,11 @@ excerpt: centos 服务器 相关
         export JAVA_HOME JRE_HOME CLASSPATH
 
 # zookeeper
+- /etc/hostname
+
+            172.168.30.11   zookeeper01
+            ...
+            
 - /vdb/em_services/zookeeper-3.4.12/zoo.cfg
 
         tickTime=2000
@@ -28,11 +33,27 @@ excerpt: centos 服务器 相关
         #maxClientCnxns=60
         #autopurge.snapRetainCount=80
         #autopurge.purgeInterval=8760
-        server.1=10.228.129.63:2888:3888
-        server.2=10.228.129.64:2888:3888
-        server.3=10.228.129.65:2888:3888
+        server.1=zookeeper01:2888:3888
+        server.2=zookeeper02:2888:3888
+        server.3=zookeeper03:2888:3888
 
 - /vdb/zookeeper-data/data/myid
+- vi /etc/systemd/system/zookeeper.service
+
+        [Unit]
+        Description=zookeeper Server 01
+        After=syslog.target network.target remote-fs.target nss-lookup.target
+
+        [Service]
+        User=root
+        Type=forking
+        Environment=ZOO_LOG_DIR=/vdb/zookeeper-data/log
+        ExecStart=/vdb/em_services/zookeeper-3.4.12/bin/zkServer.sh start
+        ExecStop=/vdb/em_services/zookeeper-3.4.12/bin/zkServer.sh stop
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
 - iptables
 
         iptables -L -n --line-numbers
@@ -57,7 +78,7 @@ excerpt: centos 服务器 相关
         Restart=always
 
         [Install]
-        WantedBy=multi-user.targe
+        WantedBy=multi-user.target
 
 - systemtcl daemon-reload
 - iptables -I INPUT -p tcp --dport 6379 -j ACCEPT
@@ -199,6 +220,7 @@ excerpt: centos 服务器 相关
 - 将lv合并为thin pool
 
         lvconvert -y --zero n -c 512K --thinpool vgname/lvname --poolmetadata vgname/lvname
+        需要在vgdisplay实际容量中占用8G,因此两个lv大小应该留足8G
          
 - lsblk 查看磁盘结构
 - df -hT 查看磁盘使用情况
@@ -209,8 +231,15 @@ excerpt: centos 服务器 相关
             thin_pool_autoextend_percent=20     扩容20%
         }
         lvchange --metadataprofile vgname-lvname vgname/lvname
+        lvs -o+seg_monitor 查看是否设置成功,监视磁盘使用
+        dmsetup ls 查看精简卷
         
-- cat /etc/fstab 查看隐射情况
+- mkfs.ext4 /dev/vgname/lvname 格式化
+- vi /etc/fstab 开机挂载精简卷
+
+        mkdir docker_disk
+        /dev/vgname/lvname      /docker_disk        ext4    defaults    0 0
+        
 - /etc/docker/daemon.json
 
         {
@@ -233,7 +262,13 @@ excerpt: centos 服务器 相关
         if [[ ! -d "/proc/sys/net/bridge/" ]]; then
 	       echo "net.bridge.bridge-nf-call-ip6tables = 1" >> /etc/sysctl.conf
 	       echo "net.bridge.bridge-nf-call-iptables = 1" >> /etc/sysctl.conf
+	       echo "net.bridge.bridge-nf-call-arptables = 1" >> /etc/sysctl.conf
 	       sysctl -p
         fi  
               
 - docker info 查看配置
+- crontab -e 定时任务
+
+        0 1 * * * find /storage/app/package -mtime +30 -name "*.zip" -exec rm -rf {} \;
+        8 1 * * * rm -rf /storage/app/build/Run.log.3
+        9 1 * * * rm -rf /storage/app/build/run.log.3
