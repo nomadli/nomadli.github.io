@@ -66,6 +66,38 @@ excerpt: centos 服务器 相关
 
 # redis
 - yum install -y http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+- yum --enablerepo=remi install redis
+- rpm -qa | grep redis   rpm -ql redis
+- redis.conf
+
+        daemonize   如果需要在后台运行，把该项改为yes
+        pidfile     配置多个pid的地址 默认在/var/run/redis.pid
+        bind        绑定ip，设置后只接受来自该ip的请求
+        port        监听端口，默认是6379
+        loglevel    分为4个等级：debug verbose notice warning
+        logfile     用于配置log文件地址
+        databases   设置数据库个数，默认使用的数据库为0
+        save        设置redis进行数据库镜像的频率。
+        rdbcompression 在进行镜像备份时，是否进行压缩
+        dbfilename  镜像备份文件的文件名
+        Dir         数据库镜像备份的文件放置路径
+        Slaveof     设置数据库为其他数据库的从数据库
+        Masterauth  主数据库连接需要的密码验证
+        Requriepass 设置 登陆时需要使用密码
+        Maxclients  限制同时使用的客户数量
+        Maxmemory   设置redis能够使用的最大内存
+        Appendonly  开启append only模式
+        Appendfsync 设置对appendonly.aof文件同步的频率（对数据进行备份的第二种方式）
+        vm-enabled  是否开启虚拟内存支持 （vm开头的参数都是配置虚拟内存的）
+        vm-swap-file设置虚拟内存的交换文件路径
+        vm-max-memory设置redis使用的最大物理内存大小
+        vm-page-size 设置虚拟内存的页大小
+        vm-pages 设置交换文件的总的page数量
+        vm-max-threads 设置VM IO同时使用的线程数量
+        Glueoutputbuf 把小的输出缓存存放在一起
+        hash-max-zipmap-entries 设置hash的临界值
+        Activerehashing 重新hash
+        
 - cp redis-4.0.9/redis.service  /etc/systemd/system/
 
         [Unit]
@@ -171,6 +203,9 @@ excerpt: centos 服务器 相关
     journalctl --disk-usage         查看日志文件大小
     journalctl --vacuum-size=10M    指定日志文件大小
 
+# maven
+- SET MAVEN_OPTS=-Xmx1024m
+
 # docker
 - yum install -y yum-utils device-mapper-persistent-data lvm2
 
@@ -251,7 +286,9 @@ excerpt: centos 服务器 相关
             ],
             "registry-mirrors": [
                 "https://hub-mirror.c.163.com"
-            ]
+            ],
+            "bip":"10.10.1.1/24",
+            "fixed-cidr":"10.10.1.0/24"
         }
           
 - systemctl enable docker
