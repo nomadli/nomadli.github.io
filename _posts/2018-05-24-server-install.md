@@ -206,6 +206,12 @@ excerpt: centos 服务器 相关
 # maven
 - SET MAVEN_OPTS=-Xmx1024m
 
+# kong
+- postgres数据库
+
+        docker run -itd p 5432:5432 -v xx/db:/var/lib/postgresql/data \
+        --restart=always --name kongdb -e POSTGRES_USER=kong -e POSTGRES_DB=kong
+
 # docker
 - yum install -y yum-utils device-mapper-persistent-data lvm2
 
