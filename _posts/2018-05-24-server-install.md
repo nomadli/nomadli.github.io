@@ -293,6 +293,9 @@ excerpt: centos 服务器 相关
             "registry-mirrors": [
                 "https://hub-mirror.c.163.com"
             ],
+            "insecure-registries":[
+                "10.228.11.12:5000"
+            ],
             "bip":"10.10.1.1/24",
             "fixed-cidr":"10.10.1.0/24"
         }

@@ -176,6 +176,12 @@ excerpt: K8 相关
 05. kubectl logs 打印pod中容器日志
 06. kubectl exec 在pod容器中执行命令 
 
-
- 
-2
+# 安装
+001. useradd -m k8s
+002. visudo
+003. useradd -m docker
+004. gpasswd -a k8s docker
+005. mkdir -p  /etc/docker/
+006. ssh-keygen -t rsa
+007. ssh-copy-id root@k8-01 ssh-copy-id root@k8-02 ...
+008. 
