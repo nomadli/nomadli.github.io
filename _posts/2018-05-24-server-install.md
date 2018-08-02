@@ -318,3 +318,5 @@ excerpt: centos 服务器 相关
         0 1 * * * find /storage/app/package -mtime +30 -name "*.zip" -exec rm -rf {} \;
         8 1 * * * rm -rf /storage/app/build/Run.log.3
         9 1 * * * rm -rf /storage/app/build/run.log.3
+
+## Vagrant 一个虚拟机开发测试环境自动搭建工具
