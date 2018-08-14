@@ -320,3 +320,27 @@ excerpt: centos 服务器 相关
         9 1 * * * rm -rf /storage/app/build/run.log.3
 
 ## Vagrant 一个虚拟机开发测试环境自动搭建工具
+
+## centos 精简
+- yum remove -y firewalld iptables audit
+- yum -y install yum-utils
+- package-cleanup --quiet --leaves --exclude-bin | xargs yum remove -y
+- package-cleanup --oldkernels --count=1
+- rm -rf /root/.wp-cli/cache/* /root/.composer/cache /home/*/.wp-cli/cache/* /home/*/.composer/cache
+- find -regex ".*/core\.[0-9]+$" -delete
+- find /var -name "*.log" \( \( -size +50M -mtime +7 \) -o -mtime +30 \) -exec truncate {} --size 0 \;
+- rm -rf /root/.npm /home/*/.npm /root/.node-gyp /home/*/.node-gyp /tmp/npm-*
+- 删除无用的系统语言
+```
+localectl status
+localedef --list-archive | grep -v en_US.utf8 | xargs localedef --delete-from-archive
+mv /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+build-locale-archive
+cd /usr/share/locale/
+ls | grep -v -i ^en | grep -v locale.alias | xargs rm -rf
+rm -rf en@* en_AU en_CA en_GB en_NZ enm
+cd /usr/share/i18n/locales/
+ls | grep -v es_US | xargs rm -rf
+```
+- /etc/grub2.cfg
+- rm -rf /var/cache/* /tmp/* /var/log/* && echo > /root/.bash_history && history -c
