@@ -297,12 +297,6 @@ consul agent -config-file x.json -config-dir /x/x -config-format json -dev -pid-
 - PUT http://x/v1/acl/bootstrap 首次生成管理token
 - PUT --data @payload.json http://x/v1/acl/create 授权
 - PUT --data @payload.json http://x/v1/acl/update 更新授权
-- PUT http://x/v1/acl/destroy/token 删除授权
-- GET http://x/v1/acl/info/token 查看授权
-- PUT http://x/v1/acl/clone/token 克隆授权
-- GET http://x/v1/acl/list 列出所有授权
-- GET http://x/v1/acl/replication?dc="dc1" 查看不同机房ACL同步情况
-- UI ACL 许可配置
 ```
 curl --request PUT --header "X-Consul-Token: 123456" --data \
 '{
@@ -313,125 +307,314 @@ curl --request PUT --header "X-Consul-Token: 123456" --data \
 }' http://172.31.30.97:8500/v1/acl/update
 curl --request PUT --header "X-Consul-Token: 123456" --data @acl.json http://192.168.8.11:8500/v1/acl/update
 ```
+- PUT http://x/v1/acl/destroy/token 删除授权
+- GET http://x/v1/acl/info/token 查看授权
+- PUT http://x/v1/acl/clone/token 克隆授权
+- GET http://x/v1/acl/list 列出所有授权
+- GET http://x/v1/acl/replication?dc="dc1" 查看不同机房ACL同步情况
 
-## consul 节点API
+## consul 管理API
+- PUT	--data @payload.json http://x/v1/operator/autopilot/configuration 设置自动节点管理
+```
+{
+  "dc":"dc1",                         可以作为URL参数
+  "cas":0,                            Check-And-Set操作,0=不存在配置时设置,非零==ModifyIndex时设置
+  "CleanupDeadServers": true,         定期自动删除死亡节点,添加新节点
+  "LastContactThreshold": "200ms",    可以失联多久
+  "MaxTrailingLogs": 250,             未同步的最大日志条数
+  "ServerStabilizationTime": "10s",   服务器在添加到群集之前必须在“健康”状态下保持稳定的最短时间
+  "RedundancyZoneTag": "",            将服务器分为区域实现冗余时使用的节点密钥,每个区域中只有一个服务器成为投票成员,空=禁用
+  "DisableUpgradeMigration": false,   企业版禁用自动升级策略
+  "UpgradeVersionTag": "",            企业版升级时用于版本信息node-meta键,空=使用Consul版本
+  "CreateIndex": 4,
+  "ModifyIndex": 4
+}
+```
+- GET	http://x/v1/operator/autopilot/configuration?dc=dc1&stale=false 获取当前自动节点管理的配置,stale没有leader返回false
+- GET	http://x/v1/operator/autopilot/health?dc=dc1 获取节点健康状态
+- GET	http://x/v1/operator/keyring?relay-factor=0 查询当前数据同步的密钥,relay-factor>0随机选择节点,最大值5
+- POST --data @payload.json http://x/v1/operator/keyring?relay-factor=0 添加数据同步的密钥
+```
+{"Key": "3lg9DxVfKNzI8O+IQ5Ek+Q=="}   16字节的Base64,consul keygen可以生成
+```
+- PUT	--data @payload.json http://x/v1/operator/keyring?relay-factor=0 更新数据同步的密钥,使统一,必须有一个已经是相同密钥
+- DELETE --data @payload.json http://x/v1/operator/keyring?relay-factor=0 删除数据同步的密钥
+- GET	http://x/v1/operator/raft/configuration?dc=dc1&stale=false 获取Raft共识算法配置,stale没有leader则失败
+- DELETE http://x/v1/operator/raft/peer?dc=dc1&id|address=xx 删除consul服务器
+
+## consul节点API
 - GET http://x/v1/agent/members?wan=false&segment=_all 查询节点信息segment(企业版)
 - GET http://x/v1/agent/self 查询当前节点的配置
 - PUT http://x/v1/agent/reload 重新热加载配置
 - PUT http://x/v1/agent/maintenance?enable=true&reason=xxx设置维护模式,将不可用直到重启
 - GET http://x/v1/agent/metrics?format=prometheus 查询当前节点状态、统计信息
 - GET http://x/v1/agent/monitor?loglevel=trace 查询运行日志,会一直监听
+- PUT http://x/v1/agent/join/ip?wan=false 加入集群
+- PUT http://x/v1/agent/leave 关闭节点服务
+- PUT http://x/v1/agent/force-leave 强制删除节点
+- PUT --data '{"Token": "123"}' http://x/v1/agent/token/acl_token 设置acl_token
+- PUT --data '{"Token": "123"}' http://x/v1/agent/token/acl_agent_token 设置acl_agent_token
+- PUT --data '{"Token": "123"}' http://x/v1/agent/token/acl_agent_master_token 设置acl_agent_master_token
+- PUT --data '{"Token": "123"}' http://x/v1/agent/token/acl_replication_token 设置acl_replication_token
 
-## [CLI consul 其它命令](https://www.consul.io/docs/commands/index.html)
-```
-CONSUL_HTTP_ADDR                地址 127.0.0.1:8500 或 unix://xx/xx.sock
-CONSUL_HTTP_TOKEN               API访问令牌 aba7cbe5-879b-999a-07cc-2efd9ac0ffe
-CONSUL_HTTP_AUTH                用户名:密码对 operations:JPIMCmhDHzTukgO6
-CONSUL_HTTP_SSL                 默认为false不启用HTTPS true启用HTTPS
-CONSUL_HTTP_SSL_VERIFY          默认为true指定SSL证书验证; false不验证
-CONSUL_CACERT                   TLS的CA文件 ca.crt
-CONSUL_CAPATH                   TLS的CA证书目录的路径
-CONSUL_CLIENT_KEY               TLS的客户机密钥文件
-CONSUL_CLIENT_CERT              TLS的客户端证书文件的路径
-CONSUL_TLS_SERVER_NAME          TLS连接时用作SNI主机的服务器名称 consulserver.domain
-xxx -h                          帮助
-xxx -help                       帮助
--autocomplete-install           安装自动补全
---version                       显示版本
-agent                           启动代理
-catalog                         查询数据
-    catalog datacenters         返回数据中心列表
-    catalog nodes               返回节点列表 -service=redis指定服务的节点
-    catalog services            返回服务列表 -node=worker-01指定节点的服务
-```
-# consul 健康检测
-- 退出代码 0 通过 1 警告 其他 失败
-- "status": "passing" 指定健康检测的初始状态
-- "service_id": "web-app" 指定健康检测涉及的服务
-- script 必须enable_script_checks设置为true
+## consul算法共识状态
+- GET	http://x/v1/status/leader 查询当前leader
+- GET	http://x/v1/status/peers 查询所有共识算法的节点
+
+## 服务注册
+- PUT	http://x/v1/agent/service/register
+- GET --data @payload.json http://x/v1/agent/services 获取注册的服务列表
 ```
 {
-  "check": {
-    "id": "mem-util",
-    "name": "Memory utilization",
-    "args": ["/usr/local/bin/check_mem.py", "-limit", "256MB"],
-    "interval": "10s",
-    "timeout": "1s"
+  "ID":"redis1",                  服务唯一ID
+  "Name":"redis",                 服务名称,可以相同,不提供默认为ID
+  "Tags":[                        标签,用来过滤筛选
+    "xxx"
+  ],
+  "EnableTagOverride":false,      是否允许非consul服务器上修改tags,默认false,修改后下次同步会恢复
+  "Address":"127.0.0.1",          服务地址,不提供则使用agent本身的地址
+  "Port": 8000,                   服务端口
+  "Meta":{                        任意的KV元数据
+    "redis_version":"4.0"
+  },
+  "Kind":"",                      默认空表示普通服务,connect-proxy使用代理
+  "ProxyDestination":"redisnv",   connect-proxy类型时,指定代理的服务名(无需注册,但ACL会管理)
+  "Connect":{                     指定代理的配置
+  },
+  "Native":false,                 是否服务本身实现了connect-proxy的功能
+  "Check": {                      指定监控检查
+    "HTTP": "http://x:5000/ck",
+    "Interval": "10s"
   }
 }
 ```
-- ttl 服务主动put状态pass,warn,fail,update
+- PUT http://x/v1/agent/service/deregister/ID 删除服务注册
+- PUT http://x/v1/agent/service/maintenance/ID?enable=true&reason=xx 设置服务状态true=维护(不可用),false=正常
+
+## 健康检测设置
+- PUT --data @payload.json http://x/v1/agent/check/register 注册健康检测
 ```
 {
-  "check": {
-    "id": "web-app",
-    "name": "Web App Status",
-    "notes": "Web app does a curl internally every 10 seconds",
-    "ttl": "30s"
+  "Name":"xxx",                         检查名称,必须
+  "ID":"xx",                            唯一ID,默认"Name"
+  "Interval":"10s",                     HTTP、TCP必需
+  "Notes":"",                           任意信息,Consul不使用
+  "DeregisterCriticalServiceAfter":"1m",状态检测失败超过此时间,将自动取消注册,最小为1分钟
+  "Args":["sh", "-c", "..."],           状态检测的命令,enable_script_checks必须为true,0=passing,1=warning,其它=critical
+  "AliasNode":"xx",                     指定节点ID
+  "AliasService":"xx",                  指定服务ID
+  "DockerContainerID":"xx",             指定容器的ID,只能用shell方式检查
+  "GRPC":"x.x.x.x:80",                  gRPC标准健康检查协
+  "GRPCUseTLS":false,                   gRPC检测是否使用TLS,默认false
+  "HTTP":"xxx",                         HTTP检查的URL,返回2xx=passing,429=warning,其它=critical
+  "Method":"GET",                       HTTP检查的方法,默认GET
+  "Header":{                            HTTP头
+    "xx":"xx",
+  },
+  "TLSSkipVerify":"false",              是否验证证书
+  "Timeout":"10s",                      检测超时时间
+  "TCP":"x.x.x.x:80",                   TCP检测,连接成功=passing,连接失败=失败
+  "TTL":"15s",                          TTL检测,由服务定时刷新,
+  "ServiceID":"xx",                     已注册检测的服务ID
+  "Status":"passing"                    初始状态:passing,warning,critical
+}
+```
+- GET http://x/v1/agent/checks 查看服务健康检测结果
+- PUT http://x/v1/agent/check/deregister/ID 删除一个服务健康检测
+- PUT http://x/v1/agent/check/pass/ID?note=xx TTL检测设置passing,note作为日志
+- PUT http://x/v1/agent/check/warn/ID?note=xx TTL检测设置warning,note作为日志
+- PUT http://x/v1/agent/check/fail/ID?note=xx TTL检测设置故障,note作为日志
+- PUT --data '{"Status":"passing", "Output":"xx"}' http://x/v1/agent/check/update/ID TTL状态刷新,Output作为日志
+
+## 监控检查查询
+- GET	http://x/v1/health/node/ID?cd=dc1 查看节点的健康状态
+- GET	http://x/v1/health/checks/servername?dc=dc1&tag=t&near=agent&node-meta=xx 查看服务健康状态,near与指定节点网络响应时间排序,meta包含指定的KV(多)
+- GET	http://x/v1/health/service/servername?dc=dc1&tag=t&near=agent&node-meta=xx&tag=xx&passing=true 列出服务节点
+- GET	http://x/v1/health/state/any|passing|warning|critical?dc=dc1&tag=t&near=agent&node-meta=xx 列出状态
+
+## catalog API 不立刻执行同步操作
+- 直接操作同步日志,相当于consul节点API、服务API、检测API的低级版本,应该优先使用高级API
+- PUT --data @payload.json http://x/v1/catalog/register 添加注册信息
+```
+{
+  "Datacenter": "dc1",                            数据中心,默认consul的数据中心
+  "ID": "40e4a748-2192-161a-0510-9bf59fe950b5",   36个字符的consul节点UUID
+  "Node": "foobar",                               consul节点ID
+  "Address": "192.168.10.10",                     consul节点bind地址
+  "TaggedAddresses": {                            指定consul节点特殊的bind地址
+    "lan": "192.168.10.10",
+    "wan": "10.0.10.10"
+  },
+  "NodeMeta": {                                   任意KV元数据
+    "somekey": "somevalue"
+  },
+  "Service": {                                    注册服务,Tags、Address、Meta、Port可选
+    "ID": "redis1",                               默认为该Service.Service的值
+    "Service": "redis",
+    "Tags": [
+      "primary",
+      "v1"
+    ],
+    "Address": "127.0.0.1",
+    "Meta": {
+        "redis_version": "4.0"
+    },
+    "Port": 8000
+  },
+  "Check": {                                    注册健康检测、不能是script,Checks可以定义多个检测
+    "Node": "foobar",
+    "CheckID": "service:redis1",                默认为Name值
+    "Name": "Redis health check",
+    "Notes": "Script based health check",       解释性字符
+    "Status": "passing",                        初始值
+    "ServiceID": "redis1",                      对应的服务名称、否则是节点级别的检测
+    "Definition": {                             检测方式配置
+      "TCP": "localhost:8888",
+      "Interval": "5s",
+      "Timeout": "1s",
+      "DeregisterCriticalServiceAfter": "30s"
+    }
+  },
+  "SkipNodeUpdate": false                       忽略更新Node信息
+}
+```
+- PUT	--data @payload.json http://x/v1/catalog/deregister 删除注册信息
+```
+{
+  "Datacenter": "dc1",                          数据中心,默认consul的数据中心
+  "Node": "foobar",                             consul节点名称,如果不指定检测及服务,则删除整个节点
+  "CheckID": "service:redis1"                   检测名称
+  "ServiceID": "redis1"                         服务名称
+}
+```
+- GET	http://x/v1/catalog/datacenters 查找所有数据中心
+- GET	http://x/v1/catalog/nodes?dc=dc1&near=agent&node-meta=xx 查看节点,near与指定节点网络响应时间排序,meta包含指定的KV(多)
+- GET	http://x/v1/catalog/services=dc1&node-meta=xx 查看服务,node-meta包含指定的K:V(多此指定)
+- GET	http://x/v1/catalog/service/name?dc=dc1&tag=t&near=agent&node-meta=xx 查看服务
+- GET	http://x/v1/catalog/connect/name?dc=dc1&tag=t&near=agent&node-meta=xx 查看代理服务
+- GET	http://x/v1/catalog/node/name?dc=dc1 查看consul节点
+
+## K/V API
+- KV只在当个机房同步
+- PUT	--data|--data-binary @contents http://x/v1/kv/key
+```
+{
+  "dc":"dc1",   可以作为URL参数
+  "flags":0,    0到(2^64)-1,consul透传,可以作为URL参数
+  "cas":0,      Check-And-Set操作,0=不存在key时设置,非零==ModifyIndex时设置
+  "acquire":"x",用x锁定操作,未持有锁且会话有效则增加LockIndex并设置Session密钥的值为x,同时设置KV,已持有锁则更新KV.即使已锁定不包含acquire参数的更新也会正常进行
+  "release":"x" 释放锁,可以作为URL参数
+}
+```
+- GET	http://x/v1/kv/key?dc=dc1&recurse=false&raw=false&keys=false&separator='/' 获取key路径的value
+```
+recurse   是否递归,递归时作为前缀而不是完整文字匹配
+raw       返回键的原始值,不做任何编码或元数据,false为base64
+keys      仅返回键,recurse必须为true
+separator 递归查找的分隔符的字符
+```
+- DELETE	http://x/v1/kv/key?recurse=false&cas=0 删除KV,case=ModifyIndex时删除,指定0时不删除
+
+## 查询模板
+- POST --data @payload.json http://x/v1/query  创建查询模板
+```
+{
+  "dc":"dc1",                                         可作为URL参数
+  "Name": "my-query",                                 名称
+  "Session": "adf4238a-882b-9ddc-4a9d-5b6758e4159e",  提供则在无效是自动删除,不提供则要手动删除
+  "Token": "",                                        指定执行模板时使用的token,空则使用ACL
+  "Service": {                                        定义查询结构
+    "Service": "redis",                               查询的服务名称
+    "Failover": {                                     本机房无可以节点时
+      "NearestN": 3,                                  查询附近的其他机房,0-5
+      "Datacenters": ["dc1", "dc2"]                   先查询附近的配置,没找到按顺序访问数据中心
+    },
+    "IgnoreCheckIDs": [""],                           查询不健康实例时忽略的检测ID列表
+    "OnlyPassing": false,                             false查询健康及警告状态的服务,true只返回健康的服务
+    "Near": "node1",                                  根据网络坐标排序,_agent接近提供服务的consul的,_ip接近查询发起者
+    "Tags": ["primary", "!experimental"],             必须包含且不包含!的tag
+    "NodeMeta": {"instance_type": "m3.large"},        必须包含指定meta
+    "Connect":false                                   true只返回代理
+  },
+  "DNS": {                                            DNS查询定义
+    "TTL": "10s"                                      指定DNS结果的有效时间
   }
 }
 ```
-- TCP 链接端口,域名解析为ipv4和ipv6时任意一个可以链接算健康
+- PUT	--data @payload.json http://x/v1/query/uuid 更新查询模板
+- GET	http://x/v1/query?dc=dc1 列出查询模板
+- GET	http://x/v1/query/uuid?dc=dc1 查看查询模板
+- DELETE http://x/v1/query/uuid?dc=dc1 删除查询模板
+- GET	http://x/v1/query/uuid/explain?dc=dc1&near=_agent&limit=10&connect=false 返回根据模板生成的真实的查询结构
+- GET	http://x/v1/query/uuid/execute?dc=dc1&near=_agent&limit=10&connect=false 执行模板查询
+
+## 会话API
+- PUT	--data @payload.json http://x/v1/session/create 创建会话
 ```
 {
-  "check": {
-    "id": "ssh",
-    "name": "SSH TCP on port 22",
-    "tcp": "localhost:22",
-    "interval": "10s",
-    "timeout": "1s"
-  }
+  "dc":"dc1",
+  "LockDelay": "15s",                   锁定延时时间
+  "Name": "my-service-lock",            指定事物名称
+  "Node": "foobar",                     指定节点名称
+  "Checks": ["serfHealth", "b"],        指定健康检测列表,需要包含serfHealth
+  "Behavior": "release",                事物失败自动执行,release|delete
+  "TTL": "30s"                          值在10-86400,超时则失败
 }
 ```
-- HTTP 允许字段header、method默认GET
+- GET	http://x/v1/session/list?dc=dc1 查询所有活动会话
+- GET	http://x/v1/session/node/node(name|ID)?dc=dc1 查询节点所有活动会话
+- GET	http://x/v1/session/info/sessionID?dc=dc1 查询会话信息
+- PUT	http://x/v1/session/renew/sessionID?dc=dc1 延长TTL
+- PUT	http://x/v1/session/destroy/sessionID?dc=dc1 删除会话
+
+## 事务API
+- 事务只在单个机房起作用
+- PUT	--data @payload.json http://x/v1/txn 发起事物
+```
+[
+  {
+    "KV": {                                       类型,目前唯一能选的
+      "Verb": "xxx",                              指定执行的操作
+      "Key": "x/x",                               指定Key
+      "Value": "<Base64-encoded blob of data>",   <512K
+      "Flags": 0,                                 无符号整数,consul透传
+      "Index": 0,                                 指定索引
+      "Session": "<session id>"                   指定会话
+    }
+  }
+]
+```
+Verb|动作|Key|Value|Flags|Index|Session
+:--|:--|:--|:--|:--|:--|:--
+set|设置KV|必须|必须|可选|无|无
+cas|使用CAS语法设置KV|必须|必须|可选|必须|无
+lock|锁定会话|必须|必须|可选|无|必须
+unlock|解锁会话必须|必须|可选|无|必须
+get|获取值|必须|无|无|无|无
+get-tree|获取前缀的所有值|必须|无|无|无|无
+check-index|索引不相等失败|必须|无|无|必须|无
+check-session|会话未锁定失败|必须|无|无|无|必须
+check-not-exists|Key存在失败|必须|无|无|无|无
+delete|删除KV|必须|无|无|无|无
+delete-tree|删除前缀所有KV|必须|无|无|无|无
+delete-cas|使用CAS语法删除|必须|无|无|必须|无
+
+## 数据API
+- GET	http://x/v1/snapshot?dc=dc1&stale=false -o x.tgz 获取快照,gzip压缩,stale是否允许使用非leader的数据
+- PUT	--data-binary @x.tgz http://x/v1/snapshot 还原数据快照
+
+## event API
+- PUT	--data @payload http://x/v1/event/fire/name 触发name(下划线开头保留)事件
 ```
 {
-  "check": {
-    "id": "api",
-    "name": "HTTP API on port 5000",
-    "http": "https://localhost:5000/health",
-    "tls_skip_verify": false,
-    "method": "POST",
-    "header": {"x-foo":["bar", "baz"]},
-    "interval": "10s",
-    "timeout": "1s"
-  }
+  "dc":"dc1",           指定触发的数据中心,可作为URL参数
+  "node":"name",        指定触发的consul节点,可作为URL参数
+  "service":"regular",  指定触发服务,可作为URL参数
+  "tag":"regular"       指定触发的tag,可作为URL参数
 }
 ```
-- Docker API 需要设置Docker Http端口,环境变量\$DOCKER_HOST,enable_script_checks为true
-```
-{
-  "check": {
-    "id": "mem-util",
-    "name": "Memory utilization",
-    "docker_container_id": "f972c95ebf0e",
-    "shell": "/bin/bash",
-    "args": ["/usr/local/bin/check_mem.py"],
-    "interval": "10s"
-  }
-}
-```
-- gRPC检测需要符合gRPC check标准,grpc_use_tls设置使用STL
-```
-{
-  "check": {
-    "id": "mem-util",
-    "name": "Service health status",
-    "grpc": "127.0.0.1:12345",
-    "grpc_use_tls": true,
-    "interval": "10s"
-  }
-}
-```
-- 别名检测
-```
-{
-  "check": {
-    "id": "web-alias",
-    "alias_service": "web"
-  }
-}
-```
+- GET http://x/v1/event/list?dc=dc1&node=name&service=c*&tag=s* 获取事件列表
+
 # consul 监听状态
 - type 监听类型
     - key           k/v
@@ -468,6 +651,7 @@ catalog                         查询数据
   }
 }
 ```
+
 # consul 使用
 - DNS解析, 需要将外网DNS转发出去
 ```
@@ -561,11 +745,3 @@ service "web" {
   intention = "deny"                            不可以修改规则
 }
 ```
-
-## HTTP API(--request PUT --header "X-Consul-Token: 123456")
-- 返回值带X-Consul-Index可以阻塞查询
-- default consistent stale X-Consul-LastContact X-Consul-KnownLeader
-- pretty
-- X-Consul-Translate-Addresses
-- 查看gossip curl http://192.168.8.11:8500/v1/operator/keyring
-- 查看raft curl http://192.168.8.11:8500/v1/operator/raft/configuration
