@@ -362,8 +362,7 @@ curl --request PUT --header "X-Consul-Token: 123456" --data @acl.json http://192
 - GET	http://x/v1/status/peers 查询所有共识算法的节点
 
 ## 服务注册
-- PUT	http://x/v1/agent/service/register
-- GET --data @payload.json http://x/v1/agent/services 获取注册的服务列表
+- PUT	--data @payload.json http://x/v1/agent/service/register
 ```
 {
   "ID":"redis1",                  服务唯一ID
@@ -388,6 +387,7 @@ curl --request PUT --header "X-Consul-Token: 123456" --data @acl.json http://192
   }
 }
 ```
+- GET http://x/v1/agent/services 获取注册的服务列表
 - PUT http://x/v1/agent/service/deregister/ID 删除服务注册
 - PUT http://x/v1/agent/service/maintenance/ID?enable=true&reason=xx 设置服务状态true=维护(不可用),false=正常
 
