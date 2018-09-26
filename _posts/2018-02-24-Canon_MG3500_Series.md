@@ -1,19 +1,23 @@
 ---
-layout: post
-title:  "佳能打印机清零"
-date:   2017-11-29 17:17:00
-categories: Other
-excerpt: 佳能打印机清零
+layout:         post
+title:          佳能打印机清零
+subtitle:       佳能打印机清零
+date:           2017-11-29 17:17:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 # 无LED
-01. 关机状态
-02. 放纸
-03. 按住[停止/重置]
-04. 按住[电源]
-05. 放开[停止/重置]
-06. 按5次[停止/重置]
-07. 按第5次[停止/重置]同时松开[电源]
+1.  关机状态
+2.  放纸
+3.  按住[停止/重置]
+4.  按住[电源]
+5.  放开[停止/重置]
+6.  按5次[停止/重置]
+7.  按第5次[停止/重置]同时松开[电源]
 
 # 有LED
 01. 关机状态

@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "kubernets"
-date:   2018-05-03 13:13:00
-categories: Swig
-excerpt: K8 相关
+layout:         post
+title:          kubernets
+subtitle:       kubernets
+date:           2018-05-03 13:13:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 # 概念
@@ -127,8 +131,8 @@ excerpt: K8 相关
 - 访问授权RBAC 添加了角色的功能
 
 # kubectl 命令
-01. kubectl run deployment—name --image=xx/xxx:v1 --port=80 创建一个deployment。
-02. kubectl crate -f x/x/x.yaml --record
+1.  kubectl run deployment—name --image=xx/xxx:v1 --port=80 创建一个deployment。
+2.  kubectl crate -f x/x/x.yaml --record
 
         apiVersion: apps/v1beta1      必填
         kind: Deployment              必填
@@ -161,8 +165,8 @@ excerpt: K8 相关
         metadata:
             name: new-namespace
             
-03. kubectl create namespace name 
-04. kubectl delete namespaces name
+3.  kubectl create namespace name 
+4.  kubectl delete namespaces name
 
         删除一个namespace会删除所有属于该namespace的资源
         default和kube-system命名空间不可删除
@@ -170,11 +174,11 @@ excerpt: K8 相关
         PersistentVolumeClaim是属于某个特定namespace的
         Events是否属于namespace取决于产生events的对象
         
-05. kubectl --namespace=<name> ... 零时namespace
-03. kubectl get xx(deployments) 显示资源(如deployments)
-04. kubectl describe xx 详细信息 
-05. kubectl logs 打印pod中容器日志
-06. kubectl exec 在pod容器中执行命令 
+5.  kubectl --namespace=<name> ... 零时namespace
+6.  kubectl get xx(deployments) 显示资源(如deployments)
+7.  kubectl describe xx 详细信息 
+8.  kubectl logs 打印pod中容器日志
+9.  kubectl exec 在pod容器中执行命令 
 
 # 安装
 001. useradd -m k8s

@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "Liquibase 数据库版本管理"
-date:   2018-06-29 09:07:00
-categories: S
-excerpt: 数据库
+layout:         post
+title:          数据库
+subtitle:       数据库持续交付
+date:           2018-06-29 09:07:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 # flyway

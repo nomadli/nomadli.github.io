@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "postgresql"
-date:   2017-05-09 11:17:00
-categories: Other
-excerpt: postgresql
+layout:         post
+title:          postgresql
+subtitle:       postgresql
+date:           2017-05-09 11:17:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 * content
@@ -71,15 +75,15 @@ excerpt: postgresql
 - 新建schema 默认除超级用户和owner其他用户无法查看和修改对象
 
 # C API
-01. PQconnectdb host、hostaddr、port、dbname、connect_timeout、user、password
-02. PQfinish 释放链接
-03. PQreset 重置链接
-04. PQdb 返回连接的数据库名称
-05. PQuser 返回连接的用户名称
-06. PQpass 返回连接的用户名密码
-07. PQhost 返回连接的服务器主机名
-08. PQport 返回连接的端口
-09. PQstatus 返回连接的状态
+1.  PQconnectdb host、hostaddr、port、dbname、connect_timeout、user、password
+2.  PQfinish 释放链接
+3.  PQreset 重置链接
+4.  PQdb 返回连接的数据库名称
+5.  PQuser 返回连接的用户名称
+6.  PQpass 返回连接的用户名密码
+7.  PQhost 返回连接的服务器主机名
+8.  PQport 返回连接的端口
+9.  PQstatus 返回连接的状态
 10. PQparameterStatus 查看当前连接的某个参数设置
 11. PQerrorMessage 返回最近连接操作产生的错误信息
 12. PQexec 执行sql

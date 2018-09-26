@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "服务发现与配置中心"
-date:   2018-07-04 19:35:00
-categories: S
-excerpt: 服务发现与配置中心
+layout:         post
+title:          服务发现与配置中心
+subtitle:       服务发现与配置中心
+date:           2018-06-29 09:07:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 - [Consul](https://github.com/hashicorp/consul)

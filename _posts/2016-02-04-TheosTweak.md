@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "IOS 越狱插件开发"
-date:   2016-01-04 11:36:00
-categories: IOS
-excerpt: IOS 越狱插件开发 Theos Tweak。
+layout:         post
+title:          IOS 越狱插件开发
+subtitle:       IOS 越狱插件开发 Theos Tweak
+date:           2016-01-04 11:36:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - IOS
 ---
 
 * content

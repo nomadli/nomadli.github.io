@@ -1,19 +1,23 @@
 ---
-layout: post
-title:  "netfilter"
-date:   2017-09-22 12:15:00
-categories: Other
-excerpt: iptables
+layout:         post
+title:          iptables
+subtitle:       iptables
+date:           2017-09-22 12:15:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 * content
 {:toc} 
 
 ## 表(table) 排名分先后
-01. raw 数据跟踪 
-02. mangle 包修改
-03. nat  网络地址转换
-04. filter 包过滤  
+1.  raw 数据跟踪 
+2.  mangle 包修改
+3.  nat  网络地址转换
+4.  filter 包过滤  
 
 ## 命令(command)
 - -A 在指定链的末尾添加一条新的规则

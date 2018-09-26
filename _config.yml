@@ -12,7 +12,7 @@ github_repo: "https://github.com/nomadli/nomadli.github.io.git"
 # Sidebar settings
 sidebar: true
 sidebar-about-description: "copies tags"
-sidebar-avatar: /img/bg-coffee.jpeg
+sidebar-avatar: /img/avatar.png
 
 # SNS settings
 RSS: false
@@ -20,8 +20,8 @@ RSS: false
 #zhihu_username:
 github_username:    nomadli
 facebook_username:  nomadli
-jianshu_username:   nomadli
-twitter_username:   nomadli
+jianshu_username:   f08a88c4a8a0
+twitter_username:   nomadli79
 
 
 # Build settings

@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "ios相关开源"
-date:   2015-12-04 09:08:00
-categories: IOS
-excerpt: IOS相关开源。
+layout:         post
+title:          ios相关开源
+subtitle:       ios相关开源
+date:           2015-12-04 09:08:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - IOS
 ---
 
 * content

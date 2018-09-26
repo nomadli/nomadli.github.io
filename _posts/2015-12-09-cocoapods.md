@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "CocoaPods"
-date:   2015-12-09 15:13:00
-categories: IOS
-excerpt: CocoaPods使用。
+layout:         post
+title:          CocoaPods
+subtitle:       CocoaPods使用
+date:           2015-12-09 15:13:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - IOS
 ---
 
 * content
@@ -64,15 +68,15 @@ excerpt: CocoaPods使用。
 - source http://github.com/...../Specs.git
 
 ## spec
-01. Pod::Spec.new do |s| .......  end
-02. s.name s.version s.summary  s.license s.homepage
-03. s.author = { "register name" => "register email" }
-04. s.description = <<-DESC ....... DESC
-05. s.source = { :git => "https://xx/xx.git", :tag => s.version.to_s }
-06. s.platform     = :ios
-07. s.ios.deployment_target = "7.0"
-08. s.frameworks = 'Foundation'
-09. s.libraries
+1.  Pod::Spec.new do |s| .......  end
+2.  s.name s.version s.summary  s.license s.homepage
+3.  s.author = { "register name" => "register email" }
+4.  s.description = <<-DESC ....... DESC
+5.  s.source = { :git => "https://xx/xx.git", :tag => s.version.to_s }
+6.  s.platform     = :ios
+7.  s.ios.deployment_target = "7.0"
+8.  s.frameworks = 'Foundation'
+9.  s.libraries
 10. s.vendored_frameworks = '*.framework' 本身是framework
 11. s.vendored_libraries
 12. s.requires_arc = true s.exclude_files 排除

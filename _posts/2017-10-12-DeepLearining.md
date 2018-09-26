@@ -1,18 +1,22 @@
 ---
-layout: post
-title:  "深度学习"
-date:   2017-10-12 11:20:00
-categories: Other
-excerpt: 深度学习
+layout:         post
+title:          深度学习
+subtitle:       深度学习
+date:           2017-09-22 12:15:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - other
 ---
 
 * content
 {:toc} 
 
 ## 机器学习过程
-01. 人提供算法集
-02. 人提供训练数据
-03. 程序从算法集中找出最佳函数(算法+参数)  
+1.  人提供算法集
+2.  人提供训练数据
+3.  程序从算法集中找出最佳函数(算法+参数)  
 
 ## 神经网络深度学习过程
 01. 算法集被神经元代替，每个神经元会被训练，多层神经元组成算法

@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "IOS 非越狱插件开发"
-date:   2016-01-04 11:36:00
-categories: IOS
-excerpt: IOS 非越狱插件开发。
+layout:         post
+title:          IOS 非越狱插件开发
+subtitle:       IOS 非越狱插件开发
+date:           2016-01-04 11:36:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - IOS
 ---
 
 * content

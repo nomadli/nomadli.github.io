@@ -1,9 +1,13 @@
 ---
-layout: post
-title:  "服务器相关技术"
-date:   2015-12-02 16:58:00
-categories: Server
-excerpt: 服务器相关技术。
+layout:         post
+title:          服务器相关技术
+subtitle:       服务器相关技术
+date:           2015-12-02 16:58:00
+author:         nomadli
+header-img:     img/post-bg-ios9-web.jpg
+catalog:        true
+tags:
+        - server
 ---
 
 * content
