@@ -4,7 +4,7 @@ title:          centos 服务安装
 subtitle:       centos 服务安装
 date:           2018-05-24 09:07:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - other

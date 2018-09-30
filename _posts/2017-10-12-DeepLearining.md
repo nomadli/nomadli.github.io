@@ -4,7 +4,7 @@ title:          深度学习
 subtitle:       深度学习
 date:           2017-09-22 12:15:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - other

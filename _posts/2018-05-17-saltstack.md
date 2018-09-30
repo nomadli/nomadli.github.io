@@ -4,7 +4,7 @@ title:          salt
 subtitle:       salt
 date:           2018-05-03 13:13:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - other

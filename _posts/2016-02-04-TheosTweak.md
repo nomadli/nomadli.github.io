@@ -4,7 +4,7 @@ title:          IOS 越狱插件开发
 subtitle:       IOS 越狱插件开发 Theos Tweak
 date:           2016-01-04 11:36:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - IOS

@@ -4,7 +4,7 @@ title:          postgresql
 subtitle:       postgresql
 date:           2017-05-09 11:17:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - other

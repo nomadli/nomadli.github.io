@@ -4,7 +4,7 @@ title:          CocoaPods
 subtitle:       CocoaPods使用
 date:           2015-12-09 15:13:00
 author:         nomadli
-header-img:     img/post-bg-ios9-web.jpg
+header-img:     ../img/post-bg-ios9-web.jpg
 catalog:        true
 tags:
         - IOS
