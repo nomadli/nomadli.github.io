@@ -4,7 +4,7 @@ title:          佳能打印机清零
 subtitle:       佳能打印机清零
 date:           2017-11-29 17:17:00
 author:         nomadli
-header-img:     ../img/post-bg-ios9-web.jpg
+header-img:     ../img/bg-coffee.jpeg
 catalog:        true
 tags:
         - other

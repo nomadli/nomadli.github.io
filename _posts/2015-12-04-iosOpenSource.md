@@ -4,7 +4,7 @@ title:          ios相关开源
 subtitle:       ios相关开源
 date:           2015-12-04 09:08:00
 author:         nomadli
-header-img:     ../img/post-bg-ios9-web.jpg
+header-img:     ../img/bg-coffee.jpeg
 catalog:        true
 tags:
         - IOS
