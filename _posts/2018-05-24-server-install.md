@@ -348,3 +348,17 @@ ls | grep -v es_US | xargs rm -rf
 ```
 - /etc/grub2.cfg
 - rm -rf /var/cache/* /tmp/* /var/log/* && echo > /root/.bash_history && history -c
+
+## selinux
+- yum install policycoreutils-python 修改seliunx的配置
+- semanage port -l |grep ssh 查看允许的端口
+- semanage port -m -t ssh_port_t -p tcp 23 修改一个允许的端口
+- semanage port -a -t ssh_port_t -p tcp 23 添加一个允许的端口
+- semanage port -d -t ssh_port_t -p tcp 23 删除一个允许端口
+
+## firewalld
+- firewall-cmd --permanent --list-port
+- firewall-cmd --permanent --zone=public --add-port=80/tcp 添加端口
+- - firewall-cmd --permanent --zone=public --add-port=80-90/tcp 添加端口范围
+- firewall-cmd --permanent --zone=public --remove-port=23/tcp 删除端口
+- firewall-cmd --reload
