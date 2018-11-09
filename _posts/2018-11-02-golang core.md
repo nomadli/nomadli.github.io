@@ -13,6 +13,11 @@ tags:
 * content
 {:toc}
 
+# 分析常用命令
+- go build -gcflags "-N -l" xx.go 禁止优化及内联
+- go tool objdump xxx  转汇编
+- gdb 单步调试汇编
+
 # golang 内核
 - asm_amd64.s 可执行程序入口地址
 - runtime.schedinit 初始调度器(虚拟线程),GOMAXPROCS最大256
