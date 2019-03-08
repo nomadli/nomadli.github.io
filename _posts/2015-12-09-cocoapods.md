@@ -35,6 +35,13 @@ tags:
 - pod trunk push '仓库名'.podspec 
 - pod repo add '仓库名' '仓库地址' 
 
+## Podfile
+- source http://github.com/...../Specs.git 指定地址源
+- install! 'cocoapods', 参数 指定安装方式 目前只支持cocoapods
+```
+install! 'cocoapods', :deterministic_uuids => false 禁用某种警告
+```
+
 ## 指定平台和SDK版本
 - platform :ios, 'x.x.x' ios平台Deployment Target是x.x.x
 
@@ -63,9 +70,6 @@ tags:
 
 ## 编译为动态库
 - use_frameworks! 编译为动态库 platform 必须在8.0以上
-
-## 指定地址源
-- source http://github.com/...../Specs.git
 
 ## spec
 1.  Pod::Spec.new do |s| .......  end
