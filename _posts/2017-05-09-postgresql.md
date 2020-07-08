@@ -270,3 +270,171 @@ tags:
     03. password 明文密码
     04. trust 知道数据库用户名就可以登录
     05. reject 拒绝认证 
+
+# HA
+```sh
+yum update -y
+
+#postgresql
+cd ~
+curl -O  https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+rpm -ivh pgdg-redhat-repo-latest.noarch.rpm
+rm -rf pgdg-redhat-repo-latest.noarch.rpm
+yum list | grep postgresql
+yum -y install postgresql12 postgresql12-server
+
+/usr/pgsql-12/bin/postgresql-12-setup initdb
+
+systemctl start postgresql-12
+systemctl enable postgresql-12
+
+passwd postgres -> postgres
+
+#主
+su - postgres
+psql
+create role HA_USER login replication encrypted password 'HA_USER_PASSWORD';
+\q
+
+cat /usr/lib/systemd/system/postgresql-12.service
+
+vi /var/lib/pgsql/12/data/pg_hba.conf
+host     replication     HA_USER         slave1_ip/32            md5
+host     replication     HA_USER         slave2_ip/32            md5
+host     all             all             0.0.0.0/0               md5
+
+vi /var/lib/pgsql/12/data/postgresql.conf
+listen_addresses = '*'
+wal_level = replica
+max_wal_senders = 5
+wal_keep_segments = 128
+hot_standby = on
+hot_standby_feedback = on
+
+vi /var/lib/pgsql/12/data/recovery.done
+recovery_target_timeline = 'latest'
+standby_mode = on
+primary_conninfo = 'host=master_ip port=5432 user=HA_USER password=HA_USER_PASSWORD'
+trigger_file = '/var/lib/pgsql/12/data/trigger_file'
+
+#从
+systemctl stop postgresql-12
+rm -rf /var/lib/pgsql/12/data/*
+chmod 0700 /var/lib/pgsql/12/data
+chown postgres.postgres /var/lib/pgsql/12/data
+
+su - postgres
+pg_basebackup -D /var/lib/pgsql/12/data -Fp -Xs -v -P -h master_ip -p 5432 -U HA_USER
+
+vi /var/lib/pgsql/12/data/postgresql.conf
+max_connections = 200 #大于主的链接
+
+mv /var/lib/pgsql/12/data/recovery.done /var/lib/pgsql/12/data/recovery.conf
+
+systemctl start postgresql-12
+
+#pgpool-II
+ssh-keygen
+ssh-copy-id -i .ssh/id_rsa.pub master_ip
+ssh-copy-id -i .ssh/id_rsa.pub slave_ip
+
+curl -O https://www.pgpool.net/yum/rpms/3.7/redhat/rhel-7-x86_64/pgpool-II-release-3.7-2.noarch.rpm
+rpm -ivh pgpool-II-release-3.7-2.noarch.rpm
+rm -rf pgpool-II-release-3.7-2.noarch.rpm
+
+yum -y install pgpool-II-pg12 pgpool-II-pg12-extensions iproute 
+
+chmod u+x /usr/sbin/ip
+chmod u+s /usr/sbin/arping
+chmod u+s /sbin/ip
+
+chown postgres.postgres /var/run/pgpool
+mkdir –p /var/log/pgpool/
+touch /var/log/pgpool/pgpool_status
+chown -R postgres.postgres /var/log/pgpool/
+
+
+vi /etc/pgpool-II/pool_hba.conf
+host    all         all        	0.0.0.0/0             md5
+host    all         all         ::1/128               
+
+
+pg_md5 postgres   #e8a48653851e28c69d0506508fb27fc5
+
+vi /etc/pgpool-II/pcp.conf
+postgres:e8a48653851e28c69d0506508fb27fc5
+
+pg_md5 -p -m -u db_use_usr_name pool_passwd
+
+vi /var/lib/pgsql/12/failover_stream.sh
+		#! /bin/sh
+		/usr/bin/ssh -T $1 "/usr/pgsql-12/bin/pg_ctl promote -D /var/lib/pgsql/12/data"
+		exit 0;
+chmod 777 /var/lib/pgsql/12/failover_stream.sh
+chown postgres.postgres /var/lib/pgsql/12/failover_stream.sh
+
+
+vi /etc/pgpool-II/pgpool.conf
+		listen_addresses = '*'
+
+		backend_hostname0 = 'master_ip'
+		backend_port0 = 5432				#HA postgresql db server port
+		backend_weight0 = 5
+		backend_data_directory0 = '/var/lib/pgsql/12/data'
+		backend_flag0 = 'ALLOW_TO_FAILOVER'
+
+		backend_hostname1 = 'slave1_ip'
+		backend_port1 = 5432
+		backend_weight1 = 1
+		backend_data_directory1 = '/var/lib/pgsql/12/data'
+		backend_flag1 = 'ALLOW_TO_FAILOVER'
+
+		....
+
+		enable_pool_hba = on
+		load_balance_mode = on
+		master_slave_mode = on
+
+		sr_check_period = 5
+		sr_check_user = 'HA_USER'
+		sr_check_password = 'HA_USER_PASSWORD'
+
+		health_check_period = 10
+		health_check_user = 'postgres'
+		health_check_password = 'postgres'
+		health_check_database = 'postgres'
+
+		failover_command = '/var/lib/pgsql/12/failover_stream.sh %H'
+
+		use_watchdog = on
+		wd_hostname = 'master_ip'
+
+		delegate_IP = 'nginx_ip or vs ip'
+		if_up_cmd = 'ip addr add $_IP_$/24 dev eth0 label eth0:0'
+		if_down_cmd = 'ip addr del $_IP_$/24 dev eth0:0'
+		arping_cmd = 'arping -U $_IP_$ -w 1 -I eth0'
+
+		heartbeat_destination0 = 'slave1_ip'
+		heartbeat_destination_port0 = 9694		#other pgpool wd_heartbeat_port=?
+		heartbeat_device0 = 'eth0'
+
+		....
+
+		other_pgpool_hostname0 = 'slave1_ip'
+		other_pgpool_port0 = 9999				#other pgpool port=?
+		other_wd_port0 = 9000					#other pgpool wd_port=?
+
+
+		pcp_port = 9898		#client connect to this port for sql
+
+#启动pgpool-II
+su - postgres
+pgpool -C –D
+
+#主库下线重新上线
+mv /var/lib/pgsql/12/data/recovery.done /var/lib/pgsql/12/data/recovery.conf
+vi /var/lib/pgsql/12/data/postgresql.conf
+	max_connections > 参数的值是大于主库的
+systemctl restart postgresql-12
+pcp_attach_node -d -U postgres -h vip_ip -p 9898 -n 0
+```
