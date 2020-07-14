@@ -276,60 +276,35 @@ tags:
 yum update -y
 
 #postgresql
-cd ~
-curl -O  https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-rpm -ivh pgdg-redhat-repo-latest.noarch.rpm
-rm -rf pgdg-redhat-repo-latest.noarch.rpm
-yum list | grep postgresql
-yum -y install postgresql12 postgresql12-server
-
+yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+yum -y install postgresql12-server postgresql12-contrib
 /usr/pgsql-12/bin/postgresql-12-setup initdb
-
-systemctl start postgresql-12
 systemctl enable postgresql-12
-
-passwd postgres -> postgres
+systemctl start postgresql-12
 
 #主
 su - postgres
-psql
-create role HA_USER login replication encrypted password 'HA_USER_PASSWORD';
-\q
+psql -c "ALTER SYSTEM SET listen_addresses TO '*';"
+psql -c "create role HA_USER login replication encrypted password 'HA_USER_PASSWORD';"
+exit
 
 cat /usr/lib/systemd/system/postgresql-12.service
+vi /var/lib/pgsql/12/data/postgresql.conf
+	wal_level = hot_standby
+    hot_standby = on
 
 vi /var/lib/pgsql/12/data/pg_hba.conf
-host     replication     HA_USER         slave1_ip/32            md5
-host     replication     HA_USER         slave2_ip/32            md5
+host     replication     HA_USER         slave_ip/32             md5
 host     all             all             0.0.0.0/0               md5
 
-vi /var/lib/pgsql/12/data/postgresql.conf
-listen_addresses = '*'
-wal_level = replica
-max_wal_senders = 5
-wal_keep_segments = 128
-hot_standby = on
-hot_standby_feedback = on
-
-vi /var/lib/pgsql/12/data/recovery.done
-recovery_target_timeline = 'latest'
-standby_mode = on
-primary_conninfo = 'host=master_ip port=5432 user=HA_USER password=HA_USER_PASSWORD'
-trigger_file = '/var/lib/pgsql/12/data/trigger_file'
+systemctl restart postgresql-12
 
 #从
 systemctl stop postgresql-12
-rm -rf /var/lib/pgsql/12/data/*
-chmod 0700 /var/lib/pgsql/12/data
-chown postgres.postgres /var/lib/pgsql/12/data
 
 su - postgres
-pg_basebackup -D /var/lib/pgsql/12/data -Fp -Xs -v -P -h master_ip -p 5432 -U HA_USER
-
-vi /var/lib/pgsql/12/data/postgresql.conf
-max_connections = 200 #大于主的链接
-
-mv /var/lib/pgsql/12/data/recovery.done /var/lib/pgsql/12/data/recovery.conf
+rm -rf /var/lib/pgsql/12/data/*
+pg_basebackup -D /var/lib/pgsql/12/data -Fp -Xs -v -P -R -h master_ip -p 5432 -U HA_USER
 
 systemctl start postgresql-12
 
