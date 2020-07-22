@@ -19,6 +19,62 @@ tags:
 - 实现.h头文件中的函数
 - 编译成动态库(*.dll *.so .jnilib)
 - static{System.loadLibrary("A");} 或 static{System.load("/x/x/A.so");}
+- javac -d xxx/ ../src/com/study/jnilearn/A.java
+- copy xx.so|xx.dll xxx/lib/
+- manifest.txt
+```txt
+    Manifest-Version: 1.0
+    Created-By: nomadli
+    Built-By: nomadli
+    Bundle-ManifestVersion: 2
+    Bundle-Name: bin
+    Bundle-SymbolicName: bin
+    Bundle-Version: 1.0.0
+    Class-Path: lib/
+    Export-Package: com.nomadli.xx,lib
+    Originally-Created-By: nomadli
+    Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.8))"
+
+    static {
+        if (System.getProperty("java.vm.vendor").contains("Android")) {
+			System.loadLibrary("xxx");
+		} else {
+            try {
+                String libname = System.mapLibraryName("xxx");
+		        if (xxx.class.getResource("/lib/" + libname) == null) {
+		        	throw new Exception("Error loading native library: /lib/" + libname);
+                }
+
+                String tmpPath = new File(System.getProperty("java.io.tmpdir")).getAbsolutePath();
+                File file = new File(tmpPath, libname);
+                if (file.exists()) {
+                    if (file.delete() == false) {
+                        throw new IOException("failed to remove existing native library file: " + file. getAbsolutePath());
+                    }
+                }
+
+                InputStream reader = db_pass_tool.class.getResourceAsStream("/lib/" + libname);
+                FileOutputStream writer = new FileOutputStream(file);
+                byte[] buf = new byte[1024];
+                int rc = 0;
+                while ((rc = reader.read(buf)) != -1) {
+                    writer.write(buf, 0, rc);
+                }
+                writer.close();
+                reader.close();
+
+                if (System.getProperty("os.name").contains("Windows") == false) {
+                    Runtime.getRuntime().exec(new String[] { "chmod", "755", file.getAbsolutePath()}).waitFor();
+                }
+                System.load(file.getAbsolutePath());
+            } catch (Throwable e) {
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+```
+- jar cvf xx.jar xxx/manifest.txt xxx/*
+- java -jar bnd.jar wrap [-properties xxx.bnd] xxx.jar 生成OSGI信息的jar包,可以引用jar中的动态库
 
 ## C方法参数及类型
 - 第一个参数JNIEnv* java虚拟机上下文,是JavaVM下每个线程一个。JavaVM代表虚拟机
