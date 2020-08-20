@@ -241,3 +241,6 @@ String|java/lang/String
     }
 
 ```
+
+## java 编译时注入
+1. 自定义gradle插件,通过asm在编译成class后、打包成dex前修改字节码。
