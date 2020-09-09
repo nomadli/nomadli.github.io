@@ -3,6 +3,13 @@ layout: page
 description: "Thinking will not overcome fear but action will."
 ---
 
+<script>
+    ((window.gitter = {}).chat = {}).options = {
+      room: 'nomadli/community'
+    };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
 {% for post in paginator.posts %}
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
