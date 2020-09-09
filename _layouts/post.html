@@ -171,6 +171,13 @@ layout: default
     </div>
 </article>
 
+<script>
+    ((window.gitter = {}).chat = {}).options = {
+      room: 'nomadli/community'
+    };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
 
 {% if site.disqus_username %}
 <!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
@@ -186,12 +193,6 @@ layout: default
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
 </script>
-<script>
-    ((window.gitter = {}).chat = {}).options = {
-      room: 'nomadli/community'
-    };
-</script>
-<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
 <!-- disqus 公共JS代码 end -->
 {% endif %}
 
