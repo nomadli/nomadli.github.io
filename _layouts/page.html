@@ -2,6 +2,14 @@
 layout: default
 ---
 
+<script>
+    ((window.gitter = {}).chat = {}).options = {
+      room: 'nomadli/community'
+    };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+
 <!-- Page Header -->
 <header class="intro-header" style="background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')">
     <div class="container">
