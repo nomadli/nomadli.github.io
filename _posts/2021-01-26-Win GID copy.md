@@ -53,7 +53,7 @@ tags:
 06. CFont字体
 07. CBitmap位图
 08. CPalette调色板
-09. SetPixel() 绘制一个像素点
+09. SetPixel() 绘制一个像素点  GetPixel()
 10. MoveTo() LineTo() 绘制直线
 11. Polyline() PolylineTo PolyPolyline 绘制多个首尾相连的线
 12. Rectangle() FillRect() FillSolidRect() 绘制矩形
@@ -69,3 +69,4 @@ tags:
 22. CloseFigure
 23. ExtTextOut
 24. TextOut
+25. SelectClipRgn 设置裁剪区域
