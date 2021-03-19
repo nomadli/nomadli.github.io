@@ -25,33 +25,26 @@ tags:
 ## 注释
 - 项目注释
 ```go
-// Golang SwaggerUI example
+// Terms Of Service:
 //
-// This documentation describes example APIs found under https://github.com/ribice/golang-swaggerui-example
+// 反诈骗服务
 //
-//     Schemes: https
-//     BasePath: /v1
-//     Version: 1.0.0
-//     License: MIT http://opensource.org/licenses/MIT
-//     Contact: Emir Ribic <ribice@gmail.com> https://ribice.ba
-//     Host: ribice.ba/goswagg
+//     Schemes: http, https
+//     Host: http://xxx
+//     BasePath: /api/v1
+//     Version: 0.0.1
+//     Contact: nomadli<dzym79@qq.com>
+//     License: © 2021 nomadli
 //
 //     Consumes:
-//     - application/json
+//        - application/json
+//        - application/xml
 //
 //     Produces:
-//     - application/json
-//
-//     Security:
-//     - bearer
-//
-//     SecurityDefinitions:
-//     bearer:
-//          type: apiKey
-//          name: Authorization
-//          in: header
+//        - application/json
 //
 // swagger:meta
+package main //这里要紧挨着
 ```
 - 将下列注释给你解开函数
 ```go
