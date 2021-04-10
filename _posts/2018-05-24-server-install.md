@@ -228,8 +228,12 @@ tags:
 - yum list docker-ce.x86_64 --showduplicates | sort -r
 - yum -y install docker-ce-18.03.1.ce
 - rpm --import keyfile 导入公钥
-- https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
-- yum install x.rpm
+- yum install -y https://zeroc.com/download/ice/3.7/el7/ice-repo-3.7.el7.noarch.rpm
+- cur https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el7.x86_64.rpm
+- cur https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-cli-20.10.5-3.el7.x86_64.rpm
+- cur https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-20.10.5-3.el7.x86_64.rpm
+- cur https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-rootless-extras-20.10.5-3.el7.x86_64.rpm
+- yum install -y docker-ce-*
 - groupadd docker 添加docker组
 - usermod -aG docker xxx 添加xxx到daocker组
 - umount /xx/xx 卸载某分区
