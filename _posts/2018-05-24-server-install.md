@@ -759,3 +759,6 @@ ls | grep -v es_US | xargs rm -rf
 - firewall-cmd --permanent --zone=public --add-port=80-90/tcp 添加端口范围
 - firewall-cmd --permanent --zone=public --remove-port=23/tcp 删除端口
 - firewall-cmd --reload
+
+## bind bind-chroot namedmanager
+- https://github.com/conceptant/bind9-namedmanager/blob/master/Dockerfile
