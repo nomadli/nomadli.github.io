@@ -19,3 +19,12 @@ tags:
 3. [PDFCreator](https://github.com/pdfforge/PDFCreator.git)
 4. [pdfwriterformac](https://git.code.sf.net/p/pdfwriterformac/git)
 
+## HPC
+- RDMA(Remote Direct Memory Access) 直接内存交换
+    - InfiniBand 标准RDMA实现，需要网卡、交换机支持
+    - RoCE       通过TCP实现，需要网卡支持
+    - iWARP      通过二层网络实现, 需要网卡支持
+- 并行文件系统
+    - [lustre](git.whamcloud.com/fs/lustre-release.git)
+    - [pvfs](http://www.pvfs.org)
+- [openhpc](https://github.com/openhpc/ohpc) hpc工具集合
