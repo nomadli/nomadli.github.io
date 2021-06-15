@@ -28,3 +28,20 @@ tags:
     - [lustre](git.whamcloud.com/fs/lustre-release.git)
     - [pvfs](http://www.pvfs.org)
 - [openhpc](https://github.com/openhpc/ohpc) hpc工具集合
+
+## CTF(Common Trace Format) 跟踪日志数据设计,用于高速日志输出
+
+## UIO
+- 驱动程序在用户态空间里实现,不支持DMA、中断等
+
+## IOMMU(Input/Output Memory Management Unit)
+- 硬件独立于CPU的MMU
+- 作用连接 DMA-capable I/O 和 主存, 将设备访问的虚拟内存转换为实际物理内存
+- 为每个直通的设备分配独立的页表，因此不同的直通设备彼此之间相互隔离
+- /dev/vfio 设备文件
+- container是内核对象,表示一个IOMMU设备,container是IOMMU操作的最小对象
+
+## VFIO
+- 把设备I/O、中断、DMA等暴露到用户空间
+- 直通的最小单元不再是某个单独的设备了,而是分布在同一个group的所有设备
+- 将IOMMU的container模拟出多个iommu_group, 用于虚拟设备.如一块物理网卡虚拟多块网卡,共享container
