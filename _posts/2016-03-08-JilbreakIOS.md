@@ -120,3 +120,18 @@ punpcklwd       交叉组合低位双字中字
 punpckldq       交叉组合低位四字中的双字
 punpcklqdq      交叉组合低位四字
 ```
+
+## usb 漏洞 A5-A11
+- [漏洞](https://github.com/axi0mX/ipwndfu)
+- Bonobo 线可在线调试iphone
+- ROOM 从A7开始都是AArch64架构，little-endian字序，ROM 的起始地址都是0x100000000
+- DFU
+    - 开机->USB模块调用usb_dfu_init()分配2048 io_buffer,注册DFU事件函数等待用户发送DFU请求
+    - 用户发送DFU_DNLOAD请求
+    - DFU事件函数检查wLength>2048?发送STALL断开USB会话,return -1;else 返回wLength
+    - 根据返回值接收wLength的数据->调用DFU事件处理函数
+    - DFU复制数据到临时系统加载地址0x18001C000(iphone8/x)
+    - io_buffer=nil,...,等待下次USB请求; 此时如果不发送数据直接发送DFU_DONE就会不清理...
+    - 用户发送DFU_DONE请求
+    - DFU事件函数释放io_buffer,尝试启动传入的临时系统, 启动失败再次调用usb_dfu_init()
+- usb_device_io_request 结构用了保存请求列表, 通过构造这个列表, 通过DFU漏洞,将列表传输到设备,当重置USB链接时, USB模块不进行请求的处理，直接调用请求的回调, 这样就可以执行任意函数了
