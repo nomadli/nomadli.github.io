@@ -19,7 +19,7 @@ tags:
 3. [PDFCreator](https://github.com/pdfforge/PDFCreator.git)
 4. [pdfwriterformac](https://git.code.sf.net/p/pdfwriterformac/git)
 
-## HPC
+## HPC 高性能计算
 - RDMA(Remote Direct Memory Access) 直接内存交换
     - InfiniBand 标准RDMA实现，需要网卡、交换机支持
     - RoCE       通过TCP实现，需要网卡支持
