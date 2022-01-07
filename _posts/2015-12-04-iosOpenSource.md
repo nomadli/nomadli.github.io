@@ -38,14 +38,18 @@ tags:
 ## sqlite3
 01. [代码版本管理工具](https://www.fossil-scm.org/home/uv/fossil-macosx-2.13-preview-20201009.tar.gz)
 02. 克隆原始 fossil clone https://www.sqlite.org/src sqlite.fossil
-03. cheout 原始代码 ../fossil open ../sqlite.fossil
-04. 将github 缺失文件复制到代码目录 manifest.uuid manifest
-05. 编辑manifest文件添加自定义源文件   F src/encry.c F src/aes256cbc.c ...
-06. 新建代码合并目录，在合并目录执行 sqlite_path/configure --enable-tempstore ...
-07. 在合并目录执行 make sqlite3.c
-08. 找到最终文件 sqlite3.c sqlite3.h config.h 添加编译宏 _HAVE_SQLITE_CONFIG_H等
-09. src目录的manager.c manager.h 简单封装sqlite3更方便些
-10. 在sqlite3.c和sqlite3.h 添加编译选择参数
+03. 修改密码fossil sql -R sqlite.fossil   UPDATE user SET pw='xxx' WHERE login='nomadli';
+04. 退出sql .exit
+05. 将密码做SHA fossil test-hash-passwords sqlite.fossil
+06. cheout 原始代码 ../fossil open ../sqlite.fossil
+07. 将github 缺失文件复制到代码目录 manifest.uuid manifest
+08. 编辑manifest文件添加自定义源文件   F src/encry.c F src/aes256cbc.c ...
+09. 新建代码合并目录，在合并目录执行 sqlite_path/configure --enable-tempstore ...
+10. 在合并目录执行 make sqlite3.c
+11. 找到最终文件 sqlite3.c sqlite3.h config.h 添加编译宏 _HAVE_SQLITE_CONFIG_H等
+12. src目录的manager.c manager.h 简单封装sqlite3更方便些
+13. 在sqlite3.c和sqlite3.h 添加编译选择参数
+14. 开启网站服务 fossil ui sqlite.fossil
 ```C
 ////1串行模式(多个线程可以使用一个句柄) 0单线程模 2多线程模式(每个线程一个句柄)
 #define THREADSAFE                      (1)
