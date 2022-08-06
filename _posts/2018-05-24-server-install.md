@@ -676,7 +676,6 @@ $InputRunFileMonitor 激活
 
 
 - /etc/docker/daemon.json
-
         {
             "storage-driver": "devicemapper",
             "storage-opts": [
@@ -684,6 +683,7 @@ $InputRunFileMonitor 激活
                 "dm.use_deferred_removal=true",
                 "dm.use_deferred_deletion=true"
             ],
+            "data-root": "/vdb/docker",
             "registry-mirrors": [
                 "https://hub-mirror.c.163.com"
             ],
