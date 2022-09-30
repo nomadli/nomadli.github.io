@@ -181,11 +181,31 @@ tags:
 9.  kubectl exec 在pod容器中执行命令 
 
 # 安装
-001. useradd -m k8s
-002. visudo
-003. useradd -m docker
-004. gpasswd -a k8s docker
-005. mkdir -p  /etc/docker/
-006. ssh-keygen -t rsa
-007. ssh-copy-id root@k8-01 ssh-copy-id root@k8-02 ...
-008. 
+- 需要所有机器同步时间 yum install -y ntpdate && ntpdate time.windows.com && date
+    - centos stream yum install -y chrony
+    - vi /etc/chrony.conf  pool time.windows.com iburst
+    - systemctl restart chronyd
+    - 修改时区 cp -a /usr/share/zoneinfo/Etc/GMT-8 /etc/localtime
+    - 修改时区 timedatectl set-timezone Asia/Shanghai
+    - 将当前时间写入硬件 timedatectl set-local-rtc 0
+- 设置主机名称 hostnamectl set-hostname name
+- 内核设置可选
+```shell
+cat > /etc/sysctl.d/kubernetes.conf <<EOF 
+#开启网桥模式
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1 
+net.ipv4.ip_forward=1 
+net.ipv4.tcp_tw_recycle=0 
+vm.swappiness=0 # 禁止使用 swap 空间，只有当系统 OOM 时才允许使用它 
+vm.overcommit_memory=1 # 不检查物理内存是否够用 
+vm.panic_on_oom=0 # 开启 OOM 
+fs.inotify.max_user_instances=8192 
+fs.inotify.max_user_watches=1048576 
+fs.file-max=52706963 
+fs.nr_open=52706963 
+net.ipv6.conf.all.disable_ipv6=1 #禁用ipv6
+net.netfilter.nf_conntrack_max=2310720 
+EOF 
+sysctl -p /etc/sysctl.d/kubernetes.conf 
+```
