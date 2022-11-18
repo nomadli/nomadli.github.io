@@ -63,3 +63,43 @@ tags:
 - [macos数学键盘](https://github.com/kostub/iosMath)
 - [C#数学键盘](https://github.com/kashifimran/math-editor)
 - [微软在线数学](https://math.microsoft.com/zh)
+
+## 语法工具
+- flex
+- yacc
+
+## 安装代理根证书
+```
+HTTP/1.1 200 OK
+Content-Type: application/x-x509-ca-cert
+Content-Disposition: filename=charles-proxy-ssl-proxying-certificate.pem
+Content-Length: 1917
+Proxy-Connection: close
+
+-----BEGIN CERTIFICATE-----
+MIIFTDCCBDSgAwIBAgIGAXZV03igMA0GCSqGSIb3DQEBCwUAMIGpMTowOAYDVQQDDDFDaGFybGVz
+IFByb3h5IENBICgxMiBEZWMgMjAyMCwgbm9tYWRsaS1tYWMubG9jYWwpMSUwIwYDVQQLDBxodHRw
+czovL2NoYXJsZXNwcm94eS5jb20vc3NsMREwDwYDVQQKDAhYSzcyIEx0ZDERMA8GA1UEBwwIQXVj
+a2xhbmQxETAPBgNVBAgMCEF1Y2tsYW5kMQswCQYDVQQGEwJOWjAgFw0wMDAxMDEwMDAwMDBaGA8y
+MDUwMDIwODA3MjEzMVowgakxOjA4BgNVBAMMMUNoYXJsZXMgUHJveHkgQ0EgKDEyIERlYyAyMDIw
+LCBub21hZGxpLW1hYy5sb2NhbCkxJTAjBgNVBAsMHGh0dHBzOi8vY2hhcmxlc3Byb3h5LmNvbS9z
+c2wxETAPBgNVBAoMCFhLNzIgTHRkMREwDwYDVQQHDAhBdWNrbGFuZDERMA8GA1UECAwIQXVja2xh
+bmQxCzAJBgNVBAYTAk5aMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApN5H38rCutIY
+dmZePtq50N/vtIfulcS/Mx0wKJVB01sujrFKelIKn8fXhlPy9YvoQd+kZnEq3RNfrMngo+CKZ4bQ
+IzA+mMpyL76z+2NoQiI1O7bT5iW+HNEExGeerK5ZfSfXiYLa7dNWhktNpRY1+ISXvsHUFrNR8JMG
+sVpGNxReuIbz5lDscWuwO/7fjSQBDtHWgw+edYCn6EkxcDuszGSaIIG65ZqkLVnU7rnDv/Ltxaqe
+Toqq8X7HhuTB+0mVmBYHS+oU/OUkqj8rsGQI48ifFWAYu1tKcIm03kUMHKTQGS3+AL6UabLJp/Gn
+2sqo57ipSyeucx7e4EETwmz6twIDAQABo4IBdDCCAXAwDwYDVR0TAQH/BAUwAwEB/zCCASwGCWCG
+SAGG+EIBDQSCAR0TggEZVGhpcyBSb290IGNlcnRpZmljYXRlIHdhcyBnZW5lcmF0ZWQgYnkgQ2hh
+cmxlcyBQcm94eSBmb3IgU1NMIFByb3h5aW5nLiBJZiB0aGlzIGNlcnRpZmljYXRlIGlzIHBhcnQg
+b2YgYSBjZXJ0aWZpY2F0ZSBjaGFpbiwgdGhpcyBtZWFucyB0aGF0IHlvdSdyZSBicm93c2luZyB0
+aHJvdWdoIENoYXJsZXMgUHJveHkgd2l0aCBTU0wgUHJveHlpbmcgZW5hYmxlZCBmb3IgdGhpcyB3
+ZWJzaXRlLiBQbGVhc2Ugc2VlIGh0dHA6Ly9jaGFybGVzcHJveHkuY29tL3NzbCBmb3IgbW9yZSBp
+bmZvcm1hdGlvbi4wDgYDVR0PAQH/BAQDAgIEMB0GA1UdDgQWBBQ4vrYuvJb3rEr/INCsRWKBqBmS
+ejANBgkqhkiG9w0BAQsFAAOCAQEAU4UbEAzF/GGVnK13AdcOSdyczC1G1ru4oiBZNXK8QYlLcxFs
+rOyWhqTKDjetd2IwQs28sq8tRrHb0fr23pOT+l3nOUG9iawobRElrZkrOASf+MTImIr5dKOLCNY8
+RS7G/kWRGhS591bGK1NHOhIBKqaiIOrGuVDTk0pS8L7N0PRUcpmzrvhTbdzufl1NqsLex+XI++z6
+f9NT5BN9HkgKytAgfcufzuUlm8OQZ+5ghao2rSy9vweJ+3VCmYewncfvYCq0DisO+CgnoMKw9ED6
+h2VKXn+k5iforQ0dTOgu9bjj6KUf8uRnNFRMzEVs4db2U2c+hGtSRnJGpZkUNDaSmg==
+-----END CERTIFICATE-----
+```
