@@ -123,3 +123,5 @@ tags:
 </configuration>
 ```
 - X:/x/Common7/Tools/vsvars32.bat" && msbuild  "x:/x/x.csproj" /v:m /t:Rebuild /p:Configuration=Release;AllowUnsafeBlocks=true 
+- sc create sname displayname= "xxx" binpath= "X:/x/x.exe"
+- [{{"Status":"Running","StateName":null,"Description":null,"Account":"LocalSystem","ProcessId":4780}}]
