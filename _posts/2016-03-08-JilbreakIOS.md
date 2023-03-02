@@ -135,3 +135,6 @@ punpcklqdq      交叉组合低位四字
     - 用户发送DFU_DONE请求
     - DFU事件函数释放io_buffer,尝试启动传入的临时系统, 启动失败再次调用usb_dfu_init()
 - usb_device_io_request 结构用了保存请求列表, 通过构造这个列表, 通过DFU漏洞,将列表传输到设备,当重置USB链接时, USB模块不进行请求的处理，直接调用请求的回调, 这样就可以执行任意函数了
+
+## 目录
+- /var/mobile/Containers/Data/Application/UUID

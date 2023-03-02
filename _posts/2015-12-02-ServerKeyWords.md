@@ -64,9 +64,22 @@ tags:
 - [C#数学键盘](https://github.com/kashifimran/math-editor)
 - [微软在线数学](https://math.microsoft.com/zh)
 
-## 语法工具
-- flex
-- yacc
+## 崩溃报告
+- Windows
+    - [BugSlayer](http://www.infopub.co.kr/pds/group_pds/bbs.asp?mon=&rec;_no=316)
+    - [BugTrap](http://www.intellesoft.net/bugtrap1.shtml)
+    - [CrashRpt](http://code.google.com/p/crashrpt/)
+    - https://sysdev.microsoft.com/
+- Multi-platform
+    - [BugSplat](http://www.bugsplatsoftware.com/)
+    - [Google Breakpad](http://code.google.com/p/google-breakpad/)
+    - [Google Crashpad](https://chromium.googlesource.com/crashpad/crashpad/)
+    - [Microsoft Winqual](https://winqual.microsoft.com/)
+- Mobile
+    - [PLCrashReporter](https://plcrashreporter.org/)
+    - [Crashlytics](http://www.crashlytics.com/)
+    - [Criterrcism](http://www.crittercism.com/product/crash-reporting/)
+    - [Splunk MINT](https://mint.splunk.com/)
 
 ## 安装代理根证书
 ```
