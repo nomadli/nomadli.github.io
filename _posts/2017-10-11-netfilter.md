@@ -13,11 +13,22 @@ tags:
 * content
 {:toc} 
 
-## 表(table) 排名分先后
-1.  raw 数据跟踪 
-2.  mangle 包修改
-3.  nat  网络地址转换
-4.  filter 包过滤  
+## 内核
+- 数组[proto][hooks]
+- proto AP_INET(PF_INET) AP_INET6...
+- hooks PRE_ROUTING LOCAL_IN FORWARD LOCAL_OUT POST_ROUTING
+    - PRE_ROUTING -> FORWARD -> POST_ROUTING
+    - PRE_ROUTING -> LOCAL_IN
+    - LOCAL_OUT -> POST_ROUTING
+
+## iptable 提供了 raw filter nat mangle 表操作hooks点
+- 表排名分先后
+    - raw 决定是否进行数据跟踪和nat -j xxx   应用于 PRE_ROUTING LOCAL_OUT
+    - mangle 包修改 数据修改应用于 所有hook
+    - nat  网络地址转换 PRE_ROUTING LOCAL_OUT POST_ROUTING
+    - filter 包过滤  LOCAL_IN LOCAL_OUT FORWARD
+- 现有表 cat /proc/net/ip_tables_names
+- \-t 指定操作表名，默认filter
 
 ## 命令(command)
 - -A 在指定链的末尾添加一条新的规则
