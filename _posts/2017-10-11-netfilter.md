@@ -119,6 +119,7 @@ firewall-cmd
     --state                                 #当前状态
     --reload                                #重新加载配置,保持已有链接
     --complete-reload                       #重新加载配置,断开所有链接
+    --list-all                              #查看当前配置概览
     --get-log-denied                        #当前拒绝日志级别
     --set-log-denied=all|unicast|broadcast|multicast|off
     --check-config                          #检测当前保存配置是否有误

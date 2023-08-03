@@ -14,11 +14,29 @@ tags:
 {:toc} 
 
 ## [路线图](https://github.com/AMAI-GmbH/AI-Expert-Roadmap)
+- https://i.am.ai/roadmap/#disclaimer
 - 基础->数据科学家->机器学习->深度学习
 - 基础->数据工程师->大数据工程师
 - 基础
     - 矩阵、线性代数基础
     - 数据库基础
+
+## 人工智能分类
+- 神经网络(Neural Networks)
+    - TensorFlow
+    - PyTorch
+- 决策树(Tree Ensembles)
+    - XGboost
+    - scikit-learn
+- 广义线性模型(Generalized Linear Models)
+    - 线性回归
+    - 逻辑回归
+    - scikit-learn
+- 支持向量机(SVM  Support Vector Machines)
+    - LIBSVM
+    - scikit-learn
+- 前后预处理(Pipelines (pre and post processing))
+    - scikit-learn
 
 ## 机器学习过程
 1.  人提供算法集
@@ -54,4 +72,50 @@ tags:
 01. 梯度下降法 随机参数->是否更优->递归 Adam、Drpout等参数算法
 02. 反向传递法
 03. 监督学习
-04. 强化学习    
+04. 强化学习
+
+
+## Apple CoreML
+![Apple CoreML](../img/apple_coreml.png)
+- [入口](https://developer.apple.com/cn/machine-learning)
+    - https://developer.apple.com/documentation/coreml
+    - https://developer.apple.com/documentation/vision
+    - https://developer.apple.com/documentation/naturallanguage
+    - https://developer.apple.com/documentation/speech
+    - https://developer.apple.com/documentation/soundanalysis
+    - https://developer.apple.com/documentation/metalperformanceshadersgraph
+- 支持的类型
+    - 面部识别的视觉API
+    - 自然语言处理API
+    - 深度神经网络
+    - 循环神经网络
+    - 卷积神经网络
+    - 机器学习
+    - 支持向量机(vector machines)
+    - 树集成(trees)
+    - 线性模型(General linear models)
+- [模型转换工具](https://github.com/apple/coremltools)
+
+
+## state of the art(SOTA) 艺术类的模型
+- LaMa 基于傅立叶卷积的分辨率鲁棒的大掩模修复
+    - Resolution-Robust Large Mask Inpainting with Fourier Convolutions
+    - 基于前馈ResNet类型的修复网络,使用快速傅里叶卷积(结合了对抗损失和高感受野感知损失的多损失组合)和大掩膜生成程序
+    - 模型的网络框架是GAN,主体网络结构是ResNet,其中加入了 FFC
+- LDM
+- ZITS
+- MAT
+- FcF
+- Manga
+- anything4 语义生成图
+- realistic Vision 1.4 根据语义生成图
+- OpenCV2
+- Stable Diffusion 1.5
+- Stable Diffusion 2.0 语义编辑图
+- paint_by_example 语义编辑图
+- instruct_pix2pix 语义编辑图
+
+## 开源
+- [TVM 将任意模型转为其它模型的开源框架](https://tvm.apache.org)
+- [Bringing-Old-Photos-Back-to-Life 微软专业去除老照片划痕、增强脸部](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life)
+- [stable-diffusion-ui 漫画生成](https://github.com/AUTOMATIC1111/stable-diffusion-webui)

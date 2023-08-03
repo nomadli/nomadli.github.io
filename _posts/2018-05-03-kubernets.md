@@ -10,6 +10,8 @@ tags:
         - other
 ---
 
+![](../img/kubernetes_01.svg)
+
 # 概念
 - Node 运行着kubelet(angent)、容器(docker,rkt)的机器,
 
@@ -191,21 +193,108 @@ tags:
 - 设置主机名称 hostnamectl set-hostname name
 - 内核设置可选
 ```shell
+#vm机安装检测mac地址、/sys/class/dmi/id/product_uuid、host_name 都要不同
+
+#https://github.com/cri-o/cri-o/blob/main/install.md#readme
+#OS=CentOS_9_Stream|CentOS_8|CentOS_8_Stream|CentOS_7  VERSION=1.18.3 ...
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+yum clean all
+yum makecache
+yum install -y cri-o #/var/run/crio/crio.sock
+#可选
+yum install containernetworking-plugins
+#源码安装 启用btrfs文件系统需要安装btrfs-progs-devel, go>=1.18
+yum install -y containers-common device-mapper-devel git glib2-devel glibc-devel glibc-static go gpgme-devel libassuan-devel libgpg-error-devel libseccomp-devel libselinux-devel pkgconfig make runc
+#centos8以上 源码安装先执行
+subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms
+subscription-manager repos --enable=rhel-8-for-x86_64-appstream-rpms
+subscription-manager repos --enable=codeready-builder-for-rhel-8-x86_64-rpms
+yum install -y containers-common device-mapper-devel git make glib2-devel glibc-devel glibc-static go runc
+go get github.com/cpuguy83/go-md2man
+yum install -y libassuan libassuan-devel libgpg-error libseccomp libselinux pkgconf-pkg-config gpgme-devel
+
+git clone git@github.com:cri-o/cri-o
+cd cri-o
+make
+make install
+#/etc/containers/registries.conf /etc/crio/crio.conf.d
+make install.config
+#/etc/crio/crio.conf
+[crio.runtime]
+conmon_cgroup = "pod"
+cgroup_manager = "systemd" #"cgroupfs"
+[crio.image]
+pause_image="registry.k8s.io/pause:3.6"
+#systemd
+make install.systemd
+systemctl daemon-reload
+systemctl enable crio
+systemctl start crio
+
+cat > /etc/modules-load.d/k8s.conf << EOF
+overlay
+br_netfilter
+EOF
+modprobe overlay
+modprobe br_netfilter
+#验证
+lsmod | grep br_netfilter
+
 cat > /etc/sysctl.d/kubernetes.conf <<EOF 
 #开启网桥模式
 net.bridge.bridge-nf-call-iptables=1
 net.bridge.bridge-nf-call-ip6tables=1 
-net.ipv4.ip_forward=1 
+net.ipv4.ip_forward=1
+vm.swappiness=0 # 禁止使用 swap 空间，kubelet需要
+
+#下面不是必须
 net.ipv4.tcp_tw_recycle=0 
-vm.swappiness=0 # 禁止使用 swap 空间，只有当系统 OOM 时才允许使用它 
 vm.overcommit_memory=1 # 不检查物理内存是否够用 
 vm.panic_on_oom=0 # 开启 OOM 
-fs.inotify.max_user_instances=8192 
-fs.inotify.max_user_watches=1048576 
-fs.file-max=52706963 
-fs.nr_open=52706963 
+fs.inotify.max_user_instances=8192 #每用户可以内存中创建文件node实例的上限
+fs.inotify.max_user_watches=1048576 #每用户可监控文件夹上限
+fs.inotify.max_queued_events= #每用户可以等待事件上限
+fs.file-max=52706963 #同时打开文件数量
+fs.nr_open=52706963 #单进程最大打开文件数
 net.ipv6.conf.all.disable_ipv6=1 #禁用ipv6
-net.netfilter.nf_conntrack_max=2310720 
-EOF 
-sysctl -p /etc/sysctl.d/kubernetes.conf 
+net.netfilter.nf_conntrack_max=2310720 #最大追踪链接数
+EOF
+#立即生效
+sysctl --system
+#或立即加载修改的配置
+sysctl -p /etc/sysctl.d/kubernetes.conf
+#验证
+sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables ...
+
+#多网卡且默认网卡无法到达k8控制平面需要先设置route表
+
+#kubeadm :用来初始化集群的指令
+#kubelet :在集群中的每个节点上用来启动 Pod 和容器等
+#kubectl :用来与集群通信的命令行工具
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+#容器访问文件系统必须禁用selinux
+setenforce 0
+sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+yum install -y kubelet kubeadm kubectl ebtables ethtool --disableexcludes=kubernetes
+systemctl enable --now kubelet
+
+cat <<EOF | sudo tee kubeadm-config.yaml
+kind: ClusterConfiguration
+apiVersion: kubeadm.k8s.io/v1beta3
+kubernetesVersion: v1.21.0
+---
+kind: KubeletConfiguration
+apiVersion: kubelet.config.k8s.io/v1beta1
+cgroupDriver: systemd
+EOF
+kubeadm init --config kubeadm-config.yaml
 ```
