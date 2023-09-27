@@ -95,6 +95,12 @@ tags:
     - 树集成(trees)
     - 线性模型(General linear models)
 - [模型转换工具](https://github.com/apple/coremltools)
+- MPS(Metal Performance Shaders) 利用显卡加速数据处理
+- Accelerate cpu矢量计算框架 -> vImage
+- 图像处理 MPS + vImage->Core Image
+- CIFilter 系统自带的理由MPS的图像处理类
+- xcrun coremlc compile coreml.mlpackage out_path || $(xcode-select -p)/usr/bin/coremlc ...
+- xcrun coremlc generate coreml.mlpackage out_path --language Swift
 
 
 ## state of the art(SOTA) 艺术类的模型
@@ -119,3 +125,5 @@ tags:
 - [TVM 将任意模型转为其它模型的开源框架](https://tvm.apache.org)
 - [Bringing-Old-Photos-Back-to-Life 微软专业去除老照片划痕、增强脸部](https://github.com/microsoft/Bringing-Old-Photos-Back-to-Life)
 - [stable-diffusion-ui 漫画生成](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+- [OpenBLAS](https://github.com/xianyi/OpenBLAS) 线性代数加速库 基于BLAS
+- [LAPACK](http://github.com/Reference-LAPACK) 线性代数加速库BLAS
