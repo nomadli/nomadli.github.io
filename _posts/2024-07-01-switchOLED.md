@@ -29,6 +29,7 @@ tags:
 - NSZ               压缩后的NSP
 - XCI               NX Card Image dump 卡带中的文件
 - XCZ               压缩后的XCI
+- prodinfo          机器识别信息,cpu安全区备份
 
 ## 硬破启动
 - 提示NO SD 表示读取了SD卡playload.bin未找到
@@ -58,4 +59,31 @@ tags:
 - 金手指
     - gbatemp.net 解压 atmosphere/contents/
 
+## [switch系统](https://switchbrew.org/wiki/xxx)
+- boot 内置系统模块, 读取引导分区0:0x00C000的BCT(bad block table)
+- boot调用PM内置模块, 硬编码启动boot2 --> 命令 pm: shell NotifyBootCompleted
+- boot2 是第一个非内置的系统模块
+- close power -> volume down + volume up -> push power -> up power -> show -> up volume 
+- close power -> volume down -> push power -> up volume down -> volume up -> up power -> show -> up volume up
 
+## 游戏校验
+- 主机检查是否可以联网
+    - 系统定时访问ctest.cdn.nintendo.net
+    - 检查http头X-Organization:Nintendo
+    - tls使用每个设备唯一的私钥与服务器通信, 私钥被CPU加密模块保护
+- 获取设备授权令牌 - 是否被ban
+    - Device AUTHorization 服务器 dauth-lp1.ndas.srv.nintendo.net
+    - http get /challenge  key_generation=主密钥修订版号
+    - 返回 {"challenge": string, "data": base-64 string} 
+    - data为对称加密AES密钥, 由CPU加密模块加入密钥槽
+    - http get /device_auth_token?challenge=%s&client_id=%016x&key_generation=%d&system_version=%s&mac=(前面参数的AES-128 CMAC)
+    - 返回token或者错误被禁止
+- 授权登陆Nintendo的账户
+    - api.accounts.nintendo.com bog-standard oauth authorization登录协议
+- 取得当前游戏的授权令牌
+    - Application AUTHorization aauth-lp1.ndas.srv.nintendo.net
+    - /application_auth_token 利用第二步的令牌:device_auth_token
+        - gamecard: application_id=%016llx&application_version=%08x&device_auth_token=%.*s&media_type=GAMECARD&cert=%.*s
+        - digital: application_id=%016llx&application_version=%08x&device_auth_token=%.*s&media_type=DIGITAL&cert=%.*s&cert_key=%.*s
+    - 获取游戏授权令牌或错误
+        - gamecard 证书 banned cert is 0x1F727C — 2124-4025
