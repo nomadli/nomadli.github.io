@@ -242,9 +242,9 @@ const config = {
     startOnLoad:true,
     theme: 'forest',
     flowchart: {
-        useMaxWidth:false,
+        useMaxWidth:true,
         htmlLabels:true
-        }
+    }
 };
 mermaid.initialize(config);
 window.mermaid.init(undefined, document.querySelectorAll('.language-mermaid'));
