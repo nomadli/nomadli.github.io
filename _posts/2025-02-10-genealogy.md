@@ -14,7 +14,7 @@ tags:
 {:toc}
 
 ```mermaid
-graph LR
+graph TB
 
 zp001001(李宗者)
 zp002001(李世威)
