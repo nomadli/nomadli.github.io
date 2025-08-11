@@ -127,3 +127,65 @@ tags:
 - [stable-diffusion-ui 漫画生成](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 - [OpenBLAS](https://github.com/xianyi/OpenBLAS) 线性代数加速库 基于BLAS
 - [LAPACK](http://github.com/Reference-LAPACK) 线性代数加速库BLAS
+
+## LLVM
+- 预训练
+    - 数据采集
+        - 列举主流URL
+        - 过滤有害URL
+        - 获取URL内容
+        - 语音过滤(english、chinese、...)
+        - Gopher过滤(无意义、低信息、暴力、偏见、垃圾文本...)
+        - minHash 去重(重复或近似)减少数据冗余,避免过拟合、偏向高频内容、节省计算资源
+        - C4(Colossal Clean Crawled Corpus)过滤,数据清洗筛选提取高质量多样化语料,去噪声重复低   效内容
+        - Custom Filters 自定义过滤, 筛选特定领域信息
+        - PII Removal(Personally Identifiable Information)删除个人信息
+    - Tokenization 分词、令牌化;将文本数据表示为token的一维序列
+        - 分词过细导致序列过长计算量大
+        - 分词过粗导致词汇表爆炸内存占用高
+        - BPE(Byte-Pair Encoding)算法平衡词汇表与序列长度
+        - WordPiece
+        - SentencePiece
+    - 词汇表
+        - 将同时出现的Token重新合并成一个新的token;重复此步骤
+        - 压缩token映射表,重新标号token
+    - 数据分片
+        - 解决内存与存储的限制
+        - 并行加速训练
+        - 单分片训练出错只需重新开始该分片
+    - 模型架构选择 Transformer自注意力机制
+        - 包含自注意力+多头注意力+前馈神经网络+注意力层+FFN等
+        - 变体 Decoder-only 适合生成任务单向注意力 Encoder-decoder适合翻译序列到序列任务
+        - 层数(L) 12-100+
+        - 隐藏层维度(d_model) 768-12288
+        - 注意力头数(h) 12-128
+    - 训练任务设计
+        - 自监督学习;无需人工标注通过文本自身生成监督信号
+        - 因果语音建模(CLM)
+        - 掩码语音建模(MLM)
+        - 混合目标如UniLM
+    - 训练执行
+        - 分布式训练、并行策略、通信优化
+        - 数据加载与预处理
+        - 向前传播
+        - 反向传播
+        - 梯度同步
+        - 参数更新
+        - 每个分片训练结果采用测试集计算Lost函数将拟合偏离反馈到神经网络参数调整再进行下次训练
+        - 训练优化 混合FP16/FP8 放大Loss Scaling防止梯度下溢 激活监测点 内核融合
+        - 硬件优化 显存管理、计算加速FlashAttention、Sparsity
+    - 预训练结果 Base Model 其回答不可读或有害或只是重复问题;需后训练
+- 后训练
+    - 将模型从通用知识库转变为可控、安全、可用工具
+    - 监督微调(Supervised Fine-Tuning SFT) 数据集是由人工创建的高质量对话
+    - 奖励模型(Reward Modeling)训练一个评估生成内容质量的模型,为后续强化学习提供反馈信号
+    - 领域适应(Domain Adaptation)在领域相关数据上继续预训练、领域高质量数据后训练
+- 问题
+    - 幻觉
+    - 长记忆
+    - 数据计算能力
+    - 模型直接使用工具的能力;目前都是在结果输出后使用工具
+
+## RL 强化学习
+    - GRPO(group Relative Policy Optimization)分组奖励估计
+    - 冷启动采用高质量长思维链的人工生成数据初始化然后开始优化推理能力训练和偏好训练和SFT
