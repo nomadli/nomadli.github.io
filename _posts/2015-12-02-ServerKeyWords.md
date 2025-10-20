@@ -19,6 +19,13 @@ tags:
 3. [PDFCreator](https://github.com/pdfforge/PDFCreator.git)
 4. [pdfwriterformac](https://git.code.sf.net/p/pdfwriterformac/git)
 
+## 语言
+- IR(Intermediate Representation) llvm 中间表示
+- 字节码 bytecode
+- 领域专用语言 Domain-Specific Intermediate Language regeex
+- AST Abstract Syntax Tree 抽象语法树
+- 
+
 ## HPC 高性能计算
 - RDMA(Remote Direct Memory Access) 直接内存交换
     - InfiniBand 标准RDMA实现，需要网卡、交换机支持
