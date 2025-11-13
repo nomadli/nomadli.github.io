@@ -189,3 +189,233 @@ tags:
 ## RL 强化学习
     - GRPO(group Relative Policy Optimization)分组奖励估计
     - 冷启动采用高质量长思维链的人工生成数据初始化然后开始优化推理能力训练和偏好训练和SFT
+
+## Dify
+```yaml
+kind: app
+version: 0.3.0
+app:                                #应用配置的容器节点
+  description: '应用描述(可选)'
+  icon: 🤖                          #应用图标(可选)
+  icon_background: '#FFEAD5'     #图标背景色(可选)
+  mode: agent-chat                  #应用模式(必填) 核心交互方式 advanced-chat workflow chatflow
+  name: xcode                       #应用名称(必填)
+  use_icon_as_answer_icon: false    #是否将应用图标用作回答图标(可选) 默认false
+
+dependencies:                       #依赖项
+- current_identifier: null          #当前依赖的唯一标识(可选) 区分不同版本的依赖
+  type: marketplace                 #依赖类型(必填) marketplace: 市场插件 custom: 自定义依赖
+  value:
+    marketplace_plugin_unique_identifier: langgenius/bedrock:0.0.24@d15b21a5f8833d2489cd336798188b929a9f86e1c05f2f4770c05fc3e1e991bf  #依赖的具体值(必填) 自定义为api url
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/json_process:0.0.2@dde6d7b676ccdcea89206d29232181a840170c19277d3d978e27cd1e3c92c707
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: junjiem/mcp_sse:0.2.1@53cc613667fcf91dd7208dd5f6d2c8df3c7ff0af8b79e8f3c0a430f1b39bda4c
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/regex:0.0.3@257eaab07b70ab1f77a881b870eefee93fc8fd0dd13350077410264f31695039
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: yevanchen/markitdown:0.0.4@776b3e2e930e2ffd28a75bb20fecbe7a020849cf754f86e604acacf1258877f6
+model_config:
+  agent_mode:
+    enabled: true
+    max_iteration: 5            #最大推理轮次
+    prompt: null
+    strategy: react             #function_call采用函数调用策略 react动态规划工具调用路径
+    tools:                      #可调用工具列表
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: code
+      provider_name: code
+      provider_type: builtin
+      tool_label: 代码解释器
+      tool_name: simple_code
+      tool_parameters:
+        code: ''
+        language: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: junjiem/mcp_sse/mcp_sse
+      provider_name: junjiem/mcp_sse/mcp_sse
+      provider_type: builtin
+      tool_label: 获取 MCP 工具列表
+      tool_name: mcp_sse_list_tools
+      tool_parameters:
+        prompts_as_tools: ''
+        resources_as_tools: ''
+        servers_config: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: junjiem/mcp_sse/mcp_sse
+      provider_name: junjiem/mcp_sse/mcp_sse
+      provider_type: builtin
+      tool_label: 调用 MCP 工具
+      tool_name: mcp_sse_call_tool
+      tool_parameters:
+        arguments: ''
+        prompts_as_tools: ''
+        resources_as_tools: ''
+        servers_config: ''
+        tool_name: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/json_process/json_process
+      provider_name: langgenius/json_process/json_process
+      provider_type: builtin
+      tool_label: JSON 解析
+      tool_name: parse
+      tool_parameters:
+        content: ''
+        ensure_ascii: ''
+        json_filter: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/json_process/json_process
+      provider_name: langgenius/json_process/json_process
+      provider_type: builtin
+      tool_label: JSON 删除
+      tool_name: json_delete
+      tool_parameters:
+        content: ''
+        ensure_ascii: ''
+        query: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/json_process/json_process
+      provider_name: langgenius/json_process/json_process
+      provider_type: builtin
+      tool_label: JSON 替换
+      tool_name: json_replace
+      tool_parameters:
+        content: ''
+        ensure_ascii: ''
+        query: ''
+        replace_model: ''
+        replace_pattern: ''
+        replace_value: ''
+        value_decode: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/json_process/json_process
+      provider_name: langgenius/json_process/json_process
+      provider_type: builtin
+      tool_label: JSON 插入
+      tool_name: json_insert
+      tool_parameters:
+        content: ''
+        create_path: ''
+        ensure_ascii: ''
+        new_value: ''
+        query: ''
+        value_decode: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: yevanchen/markitdown/markitdown
+      provider_name: yevanchen/markitdown/markitdown
+      provider_type: builtin
+      tool_label: markitdown
+      tool_name: markitdown
+      tool_parameters:
+        files: ''
+    - enabled: true
+      isDeleted: false
+      notAuthor: false
+      provider_id: langgenius/regex/regex
+      provider_name: langgenius/regex/regex
+      provider_type: builtin
+      tool_label: 正则表达式内容提取
+      tool_name: regex_extract
+      tool_parameters:
+        content: ''
+        expression: ''
+  annotation_reply:     #标注回复配置, score_threshold 相似度阈值 embedding_model 向量化模型 storage_mode 存储模式
+    enabled: false
+  chat_prompt_config: {}        #对话提示词模板 role
+  completion_prompt_config: {}  #定义生成式任务的提示模板和生成规则
+  dataset_configs:              #配置数据集用于RAG
+    datasets:
+      datasets: []
+    reranking_enable: false
+    retrieval_model: multiple
+    top_k: 4
+  dataset_query_variable: ''    #数据集查询的动态参数
+  external_data_tools: []       #定义外部数据工具集成
+  file_upload:
+    allowed_file_extensions:
+    - .JPG
+    - .JPEG
+    - .PNG
+    - .GIF
+    - .WEBP
+    - .SVG
+    - .MP4
+    - .MOV
+    - .MPEG
+    - .WEBM
+    allowed_file_types:
+    - image
+    allowed_file_upload_methods:
+    - remote_url
+    - local_file
+    enabled: true
+    image:
+      detail: high
+      enabled: true
+      number_limits: 6
+      transfer_methods:
+      - remote_url
+      - local_file
+    number_limits: 6
+  model:
+    completion_params:
+      cross-region: true                # 启用跨区域推理(提升响应速度)
+      latest_two_messages_cache_checkpoint: false #缓存最近两次用户与系统的对话消息
+      max_tokens: 32768                 # 支持长文本生成(如生成完整报告)
+      model_name: Claude 4.0 Opus
+      reasoning_budget: 128000          # 限制LLM推理过程的资源消耗
+      response_format: JSON
+      stop: []                          # 生成内容遇到什么字符时停止
+      system_cache_checkpoint: false    # 缓存系统级的通用数据 如知识库索引、工具配置、用户偏好
+      temperature: 0.5                  # 降低随机性,输出更稳定, 越小幻觉越少
+      top_k: 500
+      top_p: 0.99                       # 优先选择高概率词, 提升准确性
+    mode: chat
+    name: anthropic claude
+    provider: langgenius/bedrock/bedrock
+  more_like_this:                       #否启用类似内容推荐功能
+    enabled: false
+  opening_statement: ''                 #定义对话开始时的开场白或初始提示
+  pre_prompt: ''                        #注入的固定提示 定义角色或全局约束
+  prompt_type: structured               #定义提示模板类型,simple(基础) structured(结构化) custom(自定义）)
+  retriever_resource:                   #外部数据检索资源 知识库、数据库
+    enabled: true
+  sensitive_word_avoidance:             #敏感词过滤
+    configs: []
+    enabled: false
+    type: ''
+  speech_to_text:                       #配置语音输入功能
+    enabled: false
+  suggested_questions: []               #预定义建议问题列表，引导用户输入
+  suggested_questions_after_answer:     #在生成回答后追加建议问题
+    enabled: false
+  text_to_speech:                       #配置语音输出功能
+    enabled: false
+    language: ''
+    voice: ''
+  user_input_form: []           #自定义用户输入表单
+```
