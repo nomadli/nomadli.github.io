@@ -227,7 +227,7 @@ model_config:
   agent_mode:
     enabled: true
     max_iteration: 5            #最大推理轮次
-    prompt: null
+    prompt: "coding assistant"  #Agnet角色
     strategy: react             #function_call采用函数调用策略 react动态规划工具调用路径
     tools:                      #可调用工具列表
     - enabled: true
@@ -388,7 +388,8 @@ model_config:
       max_tokens: 32768                 # 支持长文本生成(如生成完整报告)
       model_name: Claude 4.0 Opus
       reasoning_budget: 128000          # 限制LLM推理过程的资源消耗
-      response_format: JSON
+      reasoning_type: false             # 推理策略 none step_by_step critical_thinking multi_hop self_consistency
+      response_format: JSON             # Text​ JSON​ Markdown​ HTML​ JSON Schema
       stop: []                          # 生成内容遇到什么字符时停止
       system_cache_checkpoint: false    # 缓存系统级的通用数据 如知识库索引、工具配置、用户偏好
       temperature: 0.5                  # 降低随机性,输出更稳定, 越小幻觉越少
